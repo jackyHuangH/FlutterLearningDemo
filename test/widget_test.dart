@@ -49,6 +49,8 @@ void main() {
     //添加多个元素
     food.addAll(['orange', 'milk', 'chocolate']);
     print(food);
+    List newFoods=List.from(food);
+    newFoods.add("我的爱");
 
     //集合遍历
     for (var value in food) {
@@ -122,13 +124,12 @@ void main() {
     } finally {
       print('over');
     }
-
   });
 }
 
-void printElement(String e) {
-  print("elment:$e \n");
-}
+//=>，箭头语法，当函数体只有一条语句时，可以使用箭头语法进行简化
+//注意：在=> 和；之间只能出现的是一个表达式，而不能是一条语句
+void printElement(String e) => print("elment:$e \n");
 
 //可选命名参数 {param,param,...} 总结：所有参数均为可选
 //函数可以使用=为命名参数和位置参数定义默认值。默认值必须是编译时常量。如果没有提供默认值，则默认值为null
