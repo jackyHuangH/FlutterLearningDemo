@@ -6,6 +6,8 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'bloc/bloc_base.dart';
+
 void main() => runApp(new HomePage());
 
 class HomePage extends StatelessWidget {
@@ -16,13 +18,90 @@ class HomePage extends StatelessWidget {
       //修改主题
       theme: new ThemeData(primaryColor: Colors.white),
 //        home: new Scaffold(body: new RandomWords())
-      home: new Scaffold(
-        body: MyAnimateTest(),
-//        body: LoadDataTest(),
-//        body: Signature(),
-//        body: SampleAppPage(),
+//      home: new Scaffold(
+////        body: MyAnimateTest(),
+////        body: LoadDataTest(),
+////        body: Signature(),
+////        body: SampleAppPage(),
+////        body: MyBlocPage("bloc Test"),
+//      ),
+      home:
+          BlocProvider(child: MyBlocPage("bloc test"), blocs: [CounterBloc()]),
+    );
+  }
+}
+
+//--------------------------------bloc设计模式,感觉有点像LiveData-------------------------------
+
+class MyBlocPage extends StatefulWidget {
+  MyBlocPage(this.title);
+
+  final String title;
+
+  @override
+  State<StatefulWidget> createState() => MyBlocState();
+}
+
+class MyBlocState extends State<MyBlocPage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    BlocProvider.of<CounterBloc>(context).first.increment(_counter);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<CounterBloc>(context).first.counterStream.listen((_count) {
+      setState(() {
+        _counter = _count;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("you have pushed the button this many times:"),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.display1,
+            )
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'increment',
+        child: Icon(Icons.add),
       ),
     );
+  }
+}
+
+class CounterBloc extends BlocBase {
+  final _controller = StreamController<int>();
+
+  //数据入口
+  StreamSink<int> get _counterSink => _controller.sink;
+
+  //数据出口
+  Stream<int> get counterStream => _controller.stream;
+
+  void increment(int count) {
+    _counterSink.add(++count);
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
   }
 }
 
