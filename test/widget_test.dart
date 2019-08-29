@@ -27,6 +27,11 @@ void main() {
     //----------------------dart语法学习-----------------------------
     //数字类型 int，double
     int a = 1;
+    var c=null;
+    //?. 用于非空判断，类似于kotlin
+    var d=c?.toString();
+    //?? 用于空安全选择，若为空则选??后面的值，否则选前面的值
+    var e=c??"空的";
     print(a);
 
     double b = 1.12;

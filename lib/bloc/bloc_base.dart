@@ -1,7 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 //这里我们可以将_MyHomePageState中处理counter自增的逻辑拆分到CounterBloc中
+//future(异步函数)里面有几个函数：
+//then：异步操作逻辑在这里写。
+//whenComplete：异步完成时的回调。
+//catchError：捕获异常或者异步出错时的回调。
+
 abstract class BlocBase {
+  Future getData({String labelId, int page});
+
+  Future onRefresh({String labelId});
+
+  Future onLoadMore({String labelId});
+
   void dispose();
 }
 
@@ -10,51 +23,38 @@ abstract class BlocBase {
 
 class BlocProvider<T extends BlocBase> extends StatefulWidget {
   final Widget child;
-  final List<T> blocs;
+  final T bloc;
+  final bool userDispose;
 
-  BlocProvider({
-    Key key,
-    @required this.child,
-    @required this.blocs,
-  }) : super(key: key);
+  BlocProvider(
+      {Key key,
+      @required this.child,
+      @required this.bloc,
+      this.userDispose: true})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _BlocProviderState<T>();
 
   //类静态方法
-  static List<T> of<T extends BlocBase>(BuildContext context) {
-    final type = _typeOf<_BlocProviderInherited<T>>();
-    _BlocProviderInherited<T> provider =
-        context.ancestorInheritedElementForWidgetOfExactType(type).widget;
-    return provider.blocks;
+  static T of<T extends BlocBase>(BuildContext context) {
+    final type = _typeOf<BlocProvider<T>>();
+    BlocProvider<T> provider = context.ancestorWidgetOfExactType(type);
+    return provider.bloc;
   }
 
   static Type _typeOf<T>() => T;
 }
 
-class _BlocProviderState<T extends BlocBase> extends State<BlocProvider<T>> {
+class _BlocProviderState<T> extends State<BlocProvider<BlocBase>> {
   @override
-  Widget build(BuildContext context) => _BlocProviderInherited(
-    blocks: widget.blocs,
-    child: widget.child,
-  );
+  Widget build(BuildContext context) => widget.child;
 
   @override
   void dispose() {
-    widget.blocs.map((bloc) {
-      bloc.dispose();
-    });
+    if (widget.userDispose) {
+      widget.bloc.dispose();
+    }
     super.dispose();
   }
-}
-
-class _BlocProviderInherited<T> extends InheritedWidget {
-  final List<T> blocks;
-
-  _BlocProviderInherited(
-      {Key key, @required this.blocks, @required Widget child})
-      : super(child: child, key: key);
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }
