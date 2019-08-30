@@ -27,11 +27,11 @@ void main() {
     //----------------------dart语法学习-----------------------------
     //数字类型 int，double
     int a = 1;
-    var c=null;
+    var c = null;
     //?. 用于非空判断，类似于kotlin
-    var d=c?.toString();
+    var d = c?.toString();
     //?? 用于空安全选择，若为空则选??后面的值，否则选前面的值
-    var e=c??"空的";
+    var e = c ?? "空的";
     print(a);
 
     double b = 1.12;
@@ -54,7 +54,7 @@ void main() {
     //添加多个元素
     food.addAll(['orange', 'milk', 'chocolate']);
     print(food);
-    List newFoods=List.from(food);
+    List newFoods = List.from(food);
     newFoods.add("我的爱");
 
     //集合遍历
@@ -84,13 +84,6 @@ void main() {
     foodMap[2] = '葡萄';
     foodMap[3] = '牛肉';
     print(foodMap);
-
-    //调用可选命名参数函数
-    enableFlag(bold: true);
-    enableFlag();
-
-    //调用可选位置参数函数
-    fun2('小明', '2019冲鸭！');
 
     //把函数作为参数传递给另一个函数
     food.forEach(printElement);
@@ -129,6 +122,13 @@ void main() {
     } finally {
       print('over');
     }
+
+    //调用可选命名参数函数
+    enableFlag(bold: true);
+    enableFlag();
+    //调用可选位置参数函数
+    fun2('小明', '冲鸭！', '上海');
+    fun3("小刚", 3, man: true);
   });
 }
 
@@ -142,13 +142,21 @@ void enableFlag({bool bold, bool enable = false}) {
   print("bold:$bold--enable:${enable}");
 }
 
-//可选位置参数 用[]它们标记为可选的位置参数 总结：必选参数+可选参数
-void fun2(String who, String word, [String place = '北京']) {
+//可选位置参数 用[]它们标记为可选的位置参数，调用时可不用命名但是必须按照参数顺序调用 总结：必选参数+可选参数
+void fun2(String who, String word, [String place = '北京', int year = 2019]) {
   var result = "$who say $word";
   if (place != null) {
     result = "$result at $place";
   }
+  if(year!=null){
+    result="$result in $year";
+  }
   print(result);
+}
+
+//可选命名参数，调用时必须命名
+void fun3(String name, int age, {bool man: false}) {
+  print("name:$name,age:$age,isMan?:$man");
 }
 
 class Person {
