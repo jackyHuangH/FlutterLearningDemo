@@ -1,7 +1,7 @@
-import 'package:base_library/base_library.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:async';
 
+import 'package:base_library/base_library.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 ///国际化配置
@@ -41,14 +41,12 @@ Map<String, Map<String, String>> _localizedSimpleValues = {};
 Map<String, Map<String, Map<String, String>>> _localizedValues = {};
 
 ///设置简体多语言资源
-void setLocalizedSimpleValues(
-    Map<String, Map<String, String>> localizedValues) {
+void setLocalizedSimpleValues(Map<String, Map<String, String>> localizedValues) {
   _localizedSimpleValues = localizedValues;
 }
 
 ///设置多语言资源
-void setLocalizedValues(
-    Map<String, Map<String, Map<String, String>>> localizedValues) {
+void setLocalizedValues(Map<String, Map<String, Map<String, String>>> localizedValues) {
   _localizedValues = localizedValues;
 }
 
@@ -63,8 +61,7 @@ class CustomLocalizations {
 
   /// get string by id,Can be specified languageCode,countryCode.
   /// 通过id获取字符串,可指定languageCode,countryCode.
-  String getString(String id,
-      {String languageCode, String countryCode, List<Object> params}) {
+  String getString(String id, {String languageCode, String countryCode, List<Object> params}) {
     String value;
     String _languageCode = languageCode ?? locale.languageCode;
     if (_localizedSimpleValues.isNotEmpty) {
@@ -107,13 +104,11 @@ class CustomLocalizations {
     return list;
   }
 
-  static const LocalizationsDelegate<CustomLocalizations> delegate =
-      _CustomLocalizationDelegate();
+  static const LocalizationsDelegate<CustomLocalizations> delegate = _CustomLocalizationDelegate();
 }
 
 ///自定义国际化代理
-class _CustomLocalizationDelegate
-    extends LocalizationsDelegate<CustomLocalizations> {
+class _CustomLocalizationDelegate extends LocalizationsDelegate<CustomLocalizations> {
   const _CustomLocalizationDelegate();
 
   @override
