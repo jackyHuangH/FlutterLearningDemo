@@ -43,6 +43,22 @@ dependencies:
       url: https://github.com/Sky24n/FlutterRepos.git
       path: base_library
 
+  # https://github.com/flutterchina/flukit.
+  flukit: ^1.0.2
+
+  # webview_flutter
+  webview_flutter: ^0.3.13
+
+  #带缓存的网络图片框架 https://github.com/renefloor/flutter_cached_network_image
+  cached_network_image: ^1.1.1
+
+  #A Flutter plugin for launching a URL in the mobile platform. Supports iOS and Android.
+  #  https://github.com/flutter/plugins/tree/master/packages/url_launcher
+  url_launcher: ^5.1.2
+
+  #第三方分享插件 share
+  share: ^0.6.2+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -61,12 +77,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/pic1.jpg
-    - images/pic2.jpg
-    - images/pic3.jpg
-    - images/pic4.jpg
-    - images/pic5.jpg
-    - images/pic0.jpg
+    - assets/images/guide1.jpg
+    - assets/images/guide2.jpg
+    - assets/images/guide3.jpg
+    - assets/images/guide4.jpg
+    - assets/images/splash_bg.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

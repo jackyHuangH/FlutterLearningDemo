@@ -1,9 +1,16 @@
 import 'package:base_library/base_library.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/common/sp_helper.dart';
 import 'package:flutter_start/model/models.dart';
+import 'package:flutter_start/national/intl_util.dart';
+import 'package:flutter_start/res/strings.dart';
+import 'package:flutter_start/util/http_utils.dart';
+import 'package:flutter_start/util/navigation_utils.dart';
 import 'package:flutter_start/util/utils.dart';
+import 'package:rxdart/rxdart.dart';
 
 ///闪屏页
 class SplashPage extends StatefulWidget {
@@ -14,17 +21,22 @@ class SplashPage extends StatefulWidget {
 class SplashState extends State<SplashPage> {
   //定时器，倒计时用
   TimerUtil _timerUtil;
-  List<String> _guideList = [
+
+  //引导图片本地路径
+  List<String> _guidePathList = [
     Utils.getImgPath('guide1'),
     Utils.getImgPath('guide2'),
     Utils.getImgPath('guide3'),
     Utils.getImgPath('guide4'),
   ];
 
-  //banner
-  List<Widget> _bannerList = List();
-
+  //引导页Widget集合
+  List<Widget> _guideWidgetList = List();
   SplashModel _splashModel;
+
+  //管理页面状态,1=倒计时，2=引导页
+  int _status = 0;
+  int _count = 3;
 
   @override
   void initState() {
@@ -36,18 +48,220 @@ class SplashState extends State<SplashPage> {
   void _initAsync() async {
     await SpUtil.getInstance();
     _loadSplashData();
+    //延迟加载启动页和banner
+    Observable.just(1).delay(Duration(milliseconds: 300)).listen((_) {
+      //是否加载引导页
+      if (SpUtil.getBool(Constant.key_guide, defValue: true) && ObjectUtil.isNotEmpty(_guidePathList)) {
+        _loadGuide();
+      } else {
+        _initSplash();
+      }
+    });
   }
 
+  void _initSplash() {
+    if (_splashModel == null) {
+      _goMain();
+    } else {
+      _performCountDown();
+    }
+  }
+
+  ///倒计时
+  void _performCountDown() {
+    setState(() {
+      _status = 1;
+    });
+    _timerUtil = TimerUtil(mTotalTime: 3 * 1000);
+    _timerUtil.setOnTimerTickCallback((int tick) {
+      double _tick = tick / 1000;
+      setState(() {
+        _count = tick.toInt();
+      });
+      if (_tick == 0) {
+        _goMain();
+      }
+    });
+    _timerUtil.startCountDown();
+  }
+
+  ///加载本地引导页
+  void _loadGuide() {
+    _loadBannerData();
+    setState(() {
+      _status = 2;
+    });
+  }
+
+  void _loadBannerData() {
+    for (int i = 0, length = _guidePathList.length; i < length; i++) {
+      if (i < length - 1) {
+        _guideWidgetList.add(_buildFullScreenImage(_guidePathList[i]));
+      } else {
+        //最后一页，添加“立即体验”按钮
+        _guideWidgetList.add(Stack(
+          children: <Widget>[
+            _buildFullScreenImage(_guidePathList[i]),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.only(bottom: 160.0),
+                child: InkWell(
+                  onTap: () {
+                    _goMain();
+                  },
+                  child: CircleAvatar(
+                    radius: 48.0,
+                    backgroundColor: Colors.indigoAccent,
+                    child: Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text(
+                        '立即体验',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+      }
+    }
+  }
+
+  ///加载启动图
   void _loadSplashData() {
     _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
     if (_splashModel != null) {
       setState(() {});
     }
+    HttpUtils.getSplash().then((model) {
+      if (ObjectUtil.isNotEmpty(model.imgUrl)) {
+        if (_splashModel == null || _splashModel.imgUrl != model.imgUrl) {
+          SpHelper.putObject(Constant.key_splash_model, model);
+          setState(() {
+            _splashModel = model;
+          });
+        }
+      } else {
+        SpHelper.putObject(Constant.key_splash_model, null);
+      }
+    });
+  }
 
+  void _goMain() {
+    RouteUtil.goMain(context);
+  }
+
+  ///控制child是否显示
+  ///当offstage为true，控件隐藏； 当offstage为false，显示；
+  ///当Offstage不可见的时候，如果child有动画等，需要手动停掉，Offstage并不会停掉动画等操作。
+  ///const Offstage({ Key key, this.offstage = true, Widget child })
+
+  ///构建全屏幕显示的图片
+  Widget _buildFullScreenImage(String imgPath) {
+    return Image.asset(
+      imgPath,
+      fit: BoxFit.fill,
+      width: double.infinity,
+      height: double.infinity,
+    );
+  }
+
+  ///构建广告
+  Widget _buildAdWidget() {
+    if (_splashModel == null) {
+      return Container(
+        height: 0.0,
+      );
+    }
+    return Offstage(
+      offstage: !(_status == 1),
+      child: InkWell(
+        onTap: () {
+          if (ObjectUtil.isEmpty(_splashModel.url)) {
+            return;
+          }
+          _goMain();
+          NavigationUtils.pushWeb(context, title: _splashModel.title, url: _splashModel.url);
+        },
+        child: Container(
+          alignment: Alignment.center,
+
+          ///带网络缓存的图片加载框架
+          child: CachedNetworkImage(
+            imageUrl: _splashModel.imgUrl,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => _buildFullScreenImage(Utils.getImgPath('splash_bg')),
+            errorWidget: (context, url, object) => _buildFullScreenImage(Utils.getImgPath('splash_bg')),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return null;
+    return Material(
+      child: Stack(
+        children: <Widget>[
+          Offstage(
+            offstage: !(_status == 0),
+            child: _buildFullScreenImage(Utils.getImgPath('splash_bg')),
+          ),
+          Offstage(
+            offstage: !(_status == 2),
+            child: ObjectUtil.isEmptyList(_guideWidgetList)
+                ? Container()
+                : Swiper(
+                    autoStart: false,
+                    circular: false,
+                    indicator: CircleSwiperIndicator(
+                        radius: 4.0, padding: EdgeInsets.only(bottom: 16.0), itemColor: Colors.black26),
+                    children: _guideWidgetList,
+                  ),
+          ),
+          _buildAdWidget(),
+
+          ///倒计时显示
+          Offstage(
+            offstage: !(_status == 1),
+            child: Container(
+              alignment: Alignment.bottomRight,
+              margin: EdgeInsets.all(20.0),
+              child: InkWell(
+                onTap: _goMain,
+                child: Container(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    IntlUtils.getString(context, Ids.jump_count, params: ['$_count']),
+                    style: TextStyle(fontSize: 14.0, color: Colors.white),
+                  ),
+
+                  ///倒计时按钮背景装饰
+                  decoration: BoxDecoration(
+                      color: Colours.gray_cc,
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      border: Border.all(width: 0.5, color: Colours.divider)),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    //页面销毁前取消timeUtil
+    if (_timerUtil != null) {
+      _timerUtil.cancel();
+    }
+    super.dispose();
   }
 }

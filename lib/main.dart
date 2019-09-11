@@ -12,6 +12,7 @@ import 'package:flutter_start/model/models.dart';
 import 'package:flutter_start/national/custom_localization.dart';
 import 'package:flutter_start/res/colors.dart';
 import 'package:flutter_start/res/strings.dart';
+import 'package:flutter_start/ui/page/splash_page.dart';
 
 void main() => runAutoSizeApp(BlocProvider<ApplicationBloc>(
       bloc: ApplicationBloc(),
@@ -73,8 +74,7 @@ class MyAppState extends State<MyApp> {
 
   ///加载国际化配置
   void _loadLocale() {
-    LanguageModel languageModel =
-        SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+    LanguageModel languageModel = SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
     if (languageModel != null) {
       _locale = Locale(languageModel.languageCode, languageModel.countryCode);
     } else {
@@ -92,10 +92,9 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {BaseConstant.routeMain: (ctx) {}},
-      theme: ThemeData.light().copyWith(
-          primaryColor: _themeColor,
-          accentColor: _themeColor,
-          indicatorColor: Colors.white),
+      home: SplashPage(),
+      theme:
+          ThemeData.light().copyWith(primaryColor: _themeColor, accentColor: _themeColor, indicatorColor: Colors.white),
       locale: _locale,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
