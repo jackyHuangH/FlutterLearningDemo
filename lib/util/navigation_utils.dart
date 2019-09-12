@@ -1,10 +1,23 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_start/ui/page/login_page.dart';
 import 'package:flutter_start/widget/web_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NavigationUtils {
+
+  static void pushPage(BuildContext context, {@required Widget page, String pageName, bool needLogin: false}) {
+    if (context == null || page == null) {
+      return;
+    }
+    if (needLogin && !Util.isLogin()) {
+      ///需要登录但未登录时，跳转到登录页
+      pushPage(context, page: LoginPage());
+    }
+    Navigator.push(context, MaterialPageRoute<void>(builder: (ctx) => page));
+  }
+
   static void pushWeb(BuildContext context, {String title, String titleId, String url, bool isHome: false}) {
     if (context == null || ObjectUtil.isEmpty(url)) {
       return;
@@ -13,7 +26,7 @@ class NavigationUtils {
     } else {
       Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
               builder: (ctx) => WebScaffold(
                     title: title,
                     titleId: titleId,

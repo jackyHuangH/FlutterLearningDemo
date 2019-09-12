@@ -12,6 +12,7 @@ import 'package:flutter_start/model/models.dart';
 import 'package:flutter_start/national/custom_localization.dart';
 import 'package:flutter_start/res/colors.dart';
 import 'package:flutter_start/res/strings.dart';
+import 'package:flutter_start/ui/page/main_page.dart';
 import 'package:flutter_start/ui/page/splash_page.dart';
 
 void main() => runAutoSizeApp(BlocProvider<ApplicationBloc>(
@@ -65,7 +66,7 @@ class MyAppState extends State<MyApp> {
   }
 
   ///监听用户更改国际化语言设置
-  void _initLocalizeListener() {
+  void  _initLocalizeListener() {
     final ApplicationBloc bloc = BlocProvider.of<ApplicationBloc>(context);
     bloc.appEventStream.listen((value) {
       _loadLocale();
@@ -91,7 +92,11 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {BaseConstant.routeMain: (ctx) {}},
+      routes: {
+        BaseConstant.routeMain: (ctx) {
+          return MainPage();
+        }
+      },
       home: SplashPage(),
       theme:
           ThemeData.light().copyWith(primaryColor: _themeColor, accentColor: _themeColor, indicatorColor: Colors.white),

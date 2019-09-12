@@ -34,9 +34,15 @@ class SplashState extends State<SplashPage> {
   List<Widget> _guideWidgetList = List();
   SplashModel _splashModel;
 
-  //管理页面状态,1=倒计时，2=引导页
-  int _status = 0;
+  //管理页面状态0=闪屏,1=倒计时，2=引导页
+  static const int STATUS_SPLASH = 0;
+  static const int STATUS_COUNTDOWN = 1;
+  static const int STATUS_GUIDE = 2;
+  int _status = STATUS_SPLASH;
   int _count = 3;
+
+  ///splash bg名称
+  static const String IMG_SPLASH_BG = "splash_bg";
 
   @override
   void initState() {
@@ -49,7 +55,7 @@ class SplashState extends State<SplashPage> {
     await SpUtil.getInstance();
     _loadSplashData();
     //延迟加载启动页和banner
-    Observable.just(1).delay(Duration(milliseconds: 300)).listen((_) {
+    Observable.just(1).delay(Duration(milliseconds: 500)).listen((_) {
       //是否加载引导页
       if (SpUtil.getBool(Constant.key_guide, defValue: true) && ObjectUtil.isNotEmpty(_guidePathList)) {
         _loadGuide();
@@ -70,7 +76,7 @@ class SplashState extends State<SplashPage> {
   ///倒计时
   void _performCountDown() {
     setState(() {
-      _status = 1;
+      _status = STATUS_COUNTDOWN;
     });
     _timerUtil = TimerUtil(mTotalTime: 3 * 1000);
     _timerUtil.setOnTimerTickCallback((int tick) {
@@ -89,7 +95,7 @@ class SplashState extends State<SplashPage> {
   void _loadGuide() {
     _loadBannerData();
     setState(() {
-      _status = 2;
+      _status = STATUS_GUIDE;
     });
   }
 
@@ -105,16 +111,16 @@ class SplashState extends State<SplashPage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.only(bottom: 160.0),
+                margin: EdgeInsets.only(bottom: 120.0),
                 child: InkWell(
                   onTap: () {
                     _goMain();
                   },
-                  child: CircleAvatar(
-                    radius: 48.0,
-                    backgroundColor: Colors.indigoAccent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.indigoAccent, borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     child: Padding(
-                      padding: EdgeInsets.all(2.0),
+                      padding: EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0, bottom: 10.0),
                       child: Text(
                         '立即体验',
                         textAlign: TextAlign.center,
@@ -178,7 +184,7 @@ class SplashState extends State<SplashPage> {
       );
     }
     return Offstage(
-      offstage: !(_status == 1),
+      offstage: !(_status == STATUS_COUNTDOWN),
       child: InkWell(
         onTap: () {
           if (ObjectUtil.isEmpty(_splashModel.url)) {
@@ -196,8 +202,8 @@ class SplashState extends State<SplashPage> {
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.fill,
-            placeholder: (context, url) => _buildFullScreenImage(Utils.getImgPath('splash_bg')),
-            errorWidget: (context, url, object) => _buildFullScreenImage(Utils.getImgPath('splash_bg')),
+            placeholder: (context, url) => _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
+            errorWidget: (context, url, object) => _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
           ),
         ),
       ),
@@ -209,12 +215,15 @@ class SplashState extends State<SplashPage> {
     return Material(
       child: Stack(
         children: <Widget>[
+          ///闪屏
           Offstage(
-            offstage: !(_status == 0),
-            child: _buildFullScreenImage(Utils.getImgPath('splash_bg')),
+            offstage: !(_status == STATUS_SPLASH),
+            child: _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
           ),
+
+          ///引导
           Offstage(
-            offstage: !(_status == 2),
+            offstage: !(_status == STATUS_GUIDE),
             child: ObjectUtil.isEmptyList(_guideWidgetList)
                 ? Container()
                 : Swiper(
@@ -229,7 +238,7 @@ class SplashState extends State<SplashPage> {
 
           ///倒计时显示
           Offstage(
-            offstage: !(_status == 1),
+            offstage: !(_status == STATUS_COUNTDOWN),
             child: Container(
               alignment: Alignment.bottomRight,
               margin: EdgeInsets.all(20.0),
