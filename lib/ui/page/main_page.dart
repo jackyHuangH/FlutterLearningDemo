@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage(Util.getImgPath("girl")),
+                  image: AssetImage(Util.getImgPath("dog",format: 'jpg')),
                 )),
           ),
           centerTitle: true,
@@ -62,6 +62,7 @@ class _Page {
   _Page(this.labelId);
 }
 
+///顶部tablayout
 class TabLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

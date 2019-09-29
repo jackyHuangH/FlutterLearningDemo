@@ -6,7 +6,7 @@ import 'package:flutter_start/model/models.dart';
 class HttpUtils {
   ///获取splash图片
   static Future<SplashModel> getSplash() {
-    return Future.delayed(Duration(milliseconds: 100), () {
+    return Future.delayed(Duration(milliseconds: 300), () {
       return SplashModel(
           title: 'flutter常用工具类库',
           content: 'flutter常用工具类库',

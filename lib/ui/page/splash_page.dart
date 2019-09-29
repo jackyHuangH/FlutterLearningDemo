@@ -42,7 +42,7 @@ class SplashState extends State<SplashPage> {
   int _count = 3;
 
   ///splash bg名称
-  static const String IMG_SPLASH_BG = "splash_bg";
+  static const String IMG_SPLASH_BG = 'splash_bg';
 
   @override
   void initState() {
@@ -58,9 +58,30 @@ class SplashState extends State<SplashPage> {
     Observable.just(1).delay(Duration(milliseconds: 500)).listen((_) {
       //是否加载引导页
       if (SpUtil.getBool(Constant.key_guide, defValue: true) && ObjectUtil.isNotEmpty(_guidePathList)) {
-        _loadGuide();
+        SpUtil.putBool(Constant.key_guide, false);
+        _loadGuideBanner();
       } else {
         _initSplash();
+      }
+    });
+  }
+
+  ///加载启动图
+  void _loadSplashData() {
+    _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
+    if (_splashModel != null) {
+      setState(() {});
+    }
+    HttpUtils.getSplash().then((model) {
+      if (ObjectUtil.isNotEmpty(model.imgUrl)) {
+        if (_splashModel == null || _splashModel.imgUrl != model.imgUrl) {
+          SpHelper.putObject(Constant.key_splash_model, model);
+          setState(() {
+            _splashModel = model;
+          });
+        }
+      } else {
+        SpHelper.putObject(Constant.key_splash_model, null);
       }
     });
   }
@@ -82,7 +103,7 @@ class SplashState extends State<SplashPage> {
     _timerUtil.setOnTimerTickCallback((int tick) {
       double _tick = tick / 1000;
       setState(() {
-        _count = tick.toInt();
+        _count = _tick.toInt();
       });
       if (_tick == 0) {
         _goMain();
@@ -92,7 +113,7 @@ class SplashState extends State<SplashPage> {
   }
 
   ///加载本地引导页
-  void _loadGuide() {
+  void _loadGuideBanner() {
     _loadBannerData();
     setState(() {
       _status = STATUS_GUIDE;
@@ -102,12 +123,16 @@ class SplashState extends State<SplashPage> {
   void _loadBannerData() {
     for (int i = 0, length = _guidePathList.length; i < length; i++) {
       if (i < length - 1) {
-        _guideWidgetList.add(_buildFullScreenImage(_guidePathList[i]));
+        _guideWidgetList.add(_buildFullScreenImg(
+          _guidePathList[i],
+        ));
       } else {
         //最后一页，添加“立即体验”按钮
         _guideWidgetList.add(Stack(
           children: <Widget>[
-            _buildFullScreenImage(_guidePathList[i]),
+            _buildFullScreenImg(
+              _guidePathList[i],
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -137,26 +162,6 @@ class SplashState extends State<SplashPage> {
     }
   }
 
-  ///加载启动图
-  void _loadSplashData() {
-    _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
-    if (_splashModel != null) {
-      setState(() {});
-    }
-    HttpUtils.getSplash().then((model) {
-      if (ObjectUtil.isNotEmpty(model.imgUrl)) {
-        if (_splashModel == null || _splashModel.imgUrl != model.imgUrl) {
-          SpHelper.putObject(Constant.key_splash_model, model);
-          setState(() {
-            _splashModel = model;
-          });
-        }
-      } else {
-        SpHelper.putObject(Constant.key_splash_model, null);
-      }
-    });
-  }
-
   void _goMain() {
     RouteUtil.goMain(context);
   }
@@ -167,7 +172,7 @@ class SplashState extends State<SplashPage> {
   ///const Offstage({ Key key, this.offstage = true, Widget child })
 
   ///构建全屏幕显示的图片
-  Widget _buildFullScreenImage(String imgPath) {
+  Widget _buildFullScreenImg(String imgPath) {
     return Image.asset(
       imgPath,
       fit: BoxFit.fill,
@@ -202,8 +207,8 @@ class SplashState extends State<SplashPage> {
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.fill,
-            placeholder: (context, url) => _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
-            errorWidget: (context, url, object) => _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
+            placeholder: (context, url) => _buildFullScreenImg(Utils.getImgPath(IMG_SPLASH_BG)),
+            errorWidget: (context, url, object) => _buildFullScreenImg(Utils.getImgPath(IMG_SPLASH_BG)),
           ),
         ),
       ),
@@ -215,10 +220,10 @@ class SplashState extends State<SplashPage> {
     return Material(
       child: Stack(
         children: <Widget>[
-          ///闪屏
+          ///启动图闪屏
           Offstage(
             offstage: !(_status == STATUS_SPLASH),
-            child: _buildFullScreenImage(Utils.getImgPath(IMG_SPLASH_BG)),
+            child: _buildFullScreenImg(Utils.getImgPath(IMG_SPLASH_BG)),
           ),
 
           ///引导
@@ -243,7 +248,9 @@ class SplashState extends State<SplashPage> {
               alignment: Alignment.bottomRight,
               margin: EdgeInsets.all(20.0),
               child: InkWell(
-                onTap: _goMain,
+                onTap: () {
+                  _goMain();
+                },
                 child: Container(
                   padding: EdgeInsets.all(12.0),
                   child: Text(
