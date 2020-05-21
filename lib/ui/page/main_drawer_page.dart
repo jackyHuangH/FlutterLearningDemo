@@ -1,10 +1,20 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_start/bloc/bloc_base.dart';
+import 'package:flutter_start/bloc/collect_bloc.dart';
+import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/about_page.dart';
 import 'package:flutter_start/ui/page/collection_page.dart';
+import 'package:flutter_start/ui/page/main_demos_page.dart';
 import 'package:flutter_start/ui/page/setting_page.dart';
 import 'package:flutter_start/ui/page/share_page.dart';
+import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/utils.dart';
+import 'package:toast/toast.dart';
+
+import '../../common/common.dart';
+import '../../model/models.dart';
 
 ///首页drawer页面
 class MainDrawerPage extends StatefulWidget {
@@ -24,6 +34,8 @@ class PageInfo {
 
 class _MainDrawerPageState extends State<MainDrawerPage> {
   List<PageInfo> _pageInfoList = new List();
+  PageInfo _logout = PageInfo(Ids.titleSignOut, Icons.power_settings_new, null);
+  String _userName;
 
   @override
   void initState() {
@@ -39,16 +51,165 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
     _pageInfoList.add(PageInfo(Ids.titleShare, Icons.share, SharePage()));
   }
 
+  void _showLogoutDialog(BuildContext buildContext) {
+    showDialog(
+        context: buildContext,
+        builder: (ctx) {
+          return AlertDialog(
+            content: Text("确定退出登录吗？"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  IntlUtils.getString(ctx, Ids.cancel),
+                  style: TextStyles.listExtra,
+                ),
+                onPressed: () {
+                  //取消
+                  Navigator.pop(ctx);
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  IntlUtils.getString(ctx, Ids.confirm),
+                  style: TextStyle(color: Theme.of(ctx).primaryColor, fontSize: 12.0),
+                ),
+                onPressed: () {
+                  //退出登录
+                  SpUtil.remove(BaseConstant.keyAppToken);
+                  Navigator.pop(ctx);
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (Util.isLogin()) {
       ///用户已登录
-
+      if (!_pageInfoList.contains(_logout)) {
+        _pageInfoList.add(_logout);
+        UserModel userModel =
+            SpUtil.getObj(Constant.key_user_model, (v) => UserModel.fromJson(v));
+        _userName = userModel?.username ?? "";
+      }
     } else {
       ///未登录
-
+      _userName = "未登录";
+      if (_pageInfoList.contains(_logout)) {
+        _pageInfoList.remove(_logout);
+      }
     }
 
-    return Container();
+    return Scaffold(
+      body: new Column(
+        children: <Widget>[
+          new Container(
+            height: 190.0,
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.only(
+                top: ScreenUtil.getStatusBarH(context), left: 20.0, right: 10.0),
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 65.0,
+                        height: 65.0,
+                        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image:
+                                    AssetImage(Utils.getImgPath("dog", format: 'jpg')))),
+                      ),
+                      Text(
+                        _userName,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Gaps.vGap5,
+                      Text(
+                        "个人简介",
+                        style: TextStyle(color: Colors.white, fontSize: 12.0),
+                      )
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.edit,
+                      size: 16.0,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Toast.show("功能暂未开放哦！", context);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: 50.0,
+            child: Material(
+                color: Colors.blue,
+                child: InkWell(
+                    onTap: () {
+                      //跳转到Flutter Demo页面
+                      NavigationUtils.pushPage(context,
+                          page: MainDemoPage(), pageName: "Flutter Demos");
+                    },
+                    child: new Center(
+                      child: Text(
+                        "Flutter Demo",
+                        style: TextStyle(color: Colors.white, fontSize: 15.0),
+                      ),
+                    ))),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: EdgeInsets.all(0.0),
+                itemCount: _pageInfoList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  PageInfo _pageInfo = _pageInfoList[index];
+                  return new ListTile(
+                    leading: Icon(_pageInfo.iconData),
+                    title: Text(IntlUtils.getString(context, _pageInfo.titleId)),
+                    onTap: () {
+                      if (_pageInfo.titleId == Ids.titleSignOut) {
+                        //弹出退出登录提示框
+                        _showLogoutDialog(context);
+                      } else if (_pageInfo.titleId == Ids.titleCollection) {
+                        //跳转到我的搜藏页面
+                        NavigationUtils.pushPage(context,
+                            page: BlocProvider<CollectBloc>(
+                              child: _pageInfo.page,
+                              bloc: CollectBloc(),
+                            ),
+                            pageName: _pageInfo.titleId,
+                            needLogin: Utils.isNeedLogin(_pageInfo.titleId));
+                      } else {
+                        NavigationUtils.pushPage(context,
+                            page: _pageInfo.page,
+                            pageName: _pageInfo.titleId,
+                            needLogin: Utils.isNeedLogin(_pageInfo.titleId));
+                      }
+                    },
+                  );
+                }),
+            flex: 1,
+          )
+        ],
+      ),
+    );
   }
 }

@@ -7,10 +7,10 @@ description: Flutter application hello world
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.7.8+1
+version: 0.2.6+26
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 # 添加外部依赖包
 dependencies:
@@ -26,7 +26,7 @@ dependencies:
   # 英文单词
   english_words: ^3.1.5
   #http网络框架
-  http: ^0.12.0
+  http: ^0.12.1
   # Flutter 全局屏幕适配。https://github.com/flutterchina/auto_size
   # 如果有问题请尝试修改如下链接
   # url: https://github.com/flutterchina/auto_size.git
@@ -35,7 +35,10 @@ dependencies:
       url: git://github.com/flutterchina/auto_size.git
 
   # rxdart https://github.com/ReactiveX/rxdart
-  rxdart: ^0.22.2
+  rxdart: ^0.22.6
+
+  #  flutter toast
+  toast: ^0.1.5
 
   #  基础开发工具包依赖，https://github.com/Sky24n/FlutterRepos
   base_library:
@@ -47,17 +50,17 @@ dependencies:
   flukit: ^1.0.2
 
   # webview_flutter
-  webview_flutter: ^0.3.13
+  webview_flutter: ^0.3.21
 
   #带缓存的网络图片框架 https://github.com/renefloor/flutter_cached_network_image
-  cached_network_image: ^1.1.1
+  cached_network_image: ^2.0.0
 
   #A Flutter plugin for launching a URL in the mobile platform. Supports iOS and Android.
   #  https://github.com/flutter/plugins/tree/master/packages/url_launcher
   url_launcher: ^5.1.2
 
   #第三方分享插件 share
-  share: ^0.6.2+1
+  share: ^0.6.4+1
 
 dev_dependencies:
   flutter_test:

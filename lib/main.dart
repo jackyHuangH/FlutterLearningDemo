@@ -1,4 +1,3 @@
-import 'package:auto_size/auto_size.dart';
 import 'package:base_library/base_library.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_start/bloc/application_bloc.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/main_bloc.dart';
 import 'package:flutter_start/common/common.dart';
+import 'package:flutter_start/common/global.dart';
 import 'package:flutter_start/common/sp_helper.dart';
 import 'package:flutter_start/model/models.dart';
 import 'package:flutter_start/national/custom_localization.dart';
@@ -15,13 +15,19 @@ import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/main_page.dart';
 import 'package:flutter_start/ui/page/splash_page.dart';
 
-void main() => runAutoSizeApp(BlocProvider<ApplicationBloc>(
+import 'model/models.dart';
+
+void main() {
+  Global.init(() {
+    runApp(BlocProvider<ApplicationBloc>(
       bloc: ApplicationBloc(),
       child: BlocProvider(
         child: MyApp(),
         bloc: MainBloc(),
       ),
     ));
+  });
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -38,16 +44,15 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    setInitDir(initStorageDir: true);
     //初始化国际化
     setLocalizedValues(localizedValues);
-    _initAsync();
-    _initLocalizeListener();
+    init();
   }
 
-  void _initAsync() async {
-    await SpUtil.getInstance();
-    if (!mounted) return;
+  void init() {
     _initNetUtil();
+    _initLocalizeListener();
     _loadLocale();
   }
 
@@ -66,7 +71,7 @@ class MyAppState extends State<MyApp> {
   }
 
   ///监听用户更改国际化语言设置
-  void  _initLocalizeListener() {
+  void _initLocalizeListener() {
     final ApplicationBloc bloc = BlocProvider.of<ApplicationBloc>(context);
     bloc.appEventStream.listen((value) {
       _loadLocale();
@@ -75,7 +80,7 @@ class MyAppState extends State<MyApp> {
 
   ///加载国际化配置
   void _loadLocale() {
-    LanguageModel languageModel = SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+    LanguageModel languageModel = SpUtil.getObj(Constant.keyLanguage, (v) => LanguageModel.fromJson(v));
     if (languageModel != null) {
       _locale = Locale(languageModel.languageCode, languageModel.countryCode);
     } else {
@@ -87,6 +92,11 @@ class MyAppState extends State<MyApp> {
     if (themeColorMap[_colorKey] != null) {
       _themeColor = themeColorMap[_colorKey];
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

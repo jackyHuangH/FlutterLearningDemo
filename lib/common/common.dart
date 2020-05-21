@@ -13,6 +13,7 @@ class Constant {
   static const String key_theme_color = 'key_theme_color';
   static const String key_guide = 'key_guide';
   static const String key_splash_model = 'key_splash_models';
+  static const String key_user_model = 'key_user_model';
 }
 
 class AppConfig {

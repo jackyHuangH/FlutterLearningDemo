@@ -7,8 +7,7 @@ class LanguageModel {
   String countryCode;
   bool isSelected;
 
-  LanguageModel(this.titleId, this.languageCode, this.countryCode,
-      {this.isSelected: false});
+  LanguageModel(this.titleId, this.languageCode, this.countryCode, {this.isSelected: false});
 
   //// 类的命名构造方法
   LanguageModel.fromJson(Map<String, dynamic> json) {
@@ -59,16 +58,34 @@ class SplashModel {
   }
 }
 
+//用户信息
+class UserModel {
+  String username;
+  String password;
+  String email;
+  String icon;
+  int id;
+
+  UserModel.fromJson(Map<String, dynamic> json)
+      : username = json["username"],
+        password = json["password"],
+        email = json["email"],
+        icon = json["icon"],
+        id = json["id"];
+
+  Map<String, dynamic> toJson() => {'username': username, 'password': password, 'email': email, 'icon': icon, 'id': id};
+}
+
 ///软件版本数据模型
-class VersionModel {
+class VersionControlModel {
   String title;
   String content;
   String url;
   String version;
 
-  VersionModel({this.title, this.content, this.url, this.version});
+  VersionControlModel({this.title, this.content, this.url, this.version});
 
-  VersionModel.fromJson(Map<String, dynamic> json)
+  VersionControlModel.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         content = json['content'],
         url = json['url'],
@@ -83,7 +100,7 @@ class VersionModel {
 
   @override
   String toString() {
-    return 'VersionModel{title: $title, content: $content, url: $url, version: $version}';
+    return 'VersionControlModel{title: $title, content: $content, url: $url, version: $version}';
   }
 }
 

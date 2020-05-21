@@ -17,6 +17,12 @@ final List<_Page> _allPages = <_Page>[
   _Page(Ids.titleSystem),
 ];
 
+class _Page {
+  final String labelId;
+
+  _Page(this.labelId);
+}
+
 ///主页
 class MainPage extends StatelessWidget {
   @override
@@ -24,14 +30,24 @@ class MainPage extends StatelessWidget {
     return DefaultTabController(
       length: _allPages.length,
       child: Scaffold(
-        appBar: MyAppBar(
+        appBar: AppBar(
           //用户头像
-          leading: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage(Util.getImgPath("dog",format: 'jpg')),
-                )),
+          leading: Builder(
+            builder: (BuildContext ctx) {
+              return IconButton(
+                icon: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage(Util.getImgPath("dog", format: 'jpg')),
+                      )),
+                ),
+                onPressed: () {
+                  //点击头像展开左边侧拉条
+                  Scaffold.of(ctx).openDrawer();
+                },
+              );
+            },
           ),
           centerTitle: true,
           //中间tablayout标题
@@ -56,12 +72,6 @@ class MainPage extends StatelessWidget {
   }
 }
 
-class _Page {
-  final String labelId;
-
-  _Page(this.labelId);
-}
-
 ///顶部tablayout
 class TabLayout extends StatelessWidget {
   @override
@@ -77,9 +87,9 @@ class TabLayout extends StatelessWidget {
 ///主要内容
 class TabBarViewLayout extends StatelessWidget {
   Widget _buildTabView(BuildContext context, _Page page) {
-    String _lableId = page.labelId;
+    String _labelId = page.labelId;
     Widget target;
-    switch (_lableId) {
+    switch (_labelId) {
       case Ids.titleHome:
         target = HomePage();
         break;
