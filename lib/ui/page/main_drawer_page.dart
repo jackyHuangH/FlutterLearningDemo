@@ -6,6 +6,7 @@ import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/about_page.dart';
 import 'package:flutter_start/ui/page/collection_page.dart';
+import 'package:flutter_start/ui/page/user_login_page.dart';
 import 'package:flutter_start/ui/page/main_demos_page.dart';
 import 'package:flutter_start/ui/page/setting_page.dart';
 import 'package:flutter_start/ui/page/share_page.dart';
@@ -127,12 +128,20 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                                 image:
                                     AssetImage(Utils.getImgPath("dog", format: 'jpg')))),
                       ),
-                      Text(
-                        _userName,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () {
+                          //未登录，跳转登录
+                          if (!Util.isLogin()) {
+                            NavigationUtils.pushPage(context, page: UserLoginPage());
+                          }
+                        },
+                        child: Text(
+                          _userName,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Gaps.vGap5,
                       Text(
@@ -182,6 +191,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                 itemBuilder: (BuildContext context, int index) {
                   PageInfo _pageInfo = _pageInfoList[index];
                   return new ListTile(
+                    dense: false,
                     leading: Icon(_pageInfo.iconData),
                     title: Text(IntlUtils.getString(context, _pageInfo.titleId)),
                     onTap: () {
@@ -189,7 +199,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                         //弹出退出登录提示框
                         _showLogoutDialog(context);
                       } else if (_pageInfo.titleId == Ids.titleCollection) {
-                        //跳转到我的搜藏页面
+                        //跳转到我的收藏页面
                         NavigationUtils.pushPage(context,
                             page: BlocProvider<CollectBloc>(
                               child: _pageInfo.page,

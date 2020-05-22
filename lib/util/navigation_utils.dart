@@ -1,7 +1,7 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_start/ui/page/login_page.dart';
+import 'package:flutter_start/ui/page/user_login_page.dart';
 import 'package:flutter_start/widget/web_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,7 +13,7 @@ class NavigationUtils {
     }
     if (needLogin && !Util.isLogin()) {
       ///需要登录但未登录时，跳转到登录页
-      pushPage(context, page: LoginPage());
+      pushPage(context, page: UserLoginPage());
     }
     Navigator.push(context, MaterialPageRoute<void>(builder: (ctx) => page));
   }

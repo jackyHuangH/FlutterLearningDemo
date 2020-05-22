@@ -88,6 +88,10 @@ flutter:
     - assets/images/girl.png
     - assets/images/dog.jpg
 
+    - packages/base_library/assets/ic_data_empty.png
+    - packages/base_library/assets/ic_login_bg.png
+    - packages/base_library/assets/ic_network_error.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
