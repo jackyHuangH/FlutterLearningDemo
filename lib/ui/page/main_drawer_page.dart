@@ -2,6 +2,8 @@ import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/collect_bloc.dart';
+import 'package:flutter_start/event/event.dart';
+import 'package:flutter_start/model/protocol/models.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/about_page.dart';
@@ -15,7 +17,7 @@ import 'package:flutter_start/util/utils.dart';
 import 'package:toast/toast.dart';
 
 import '../../common/common.dart';
-import '../../model/models.dart';
+import '../../model/local_models.dart';
 
 ///首页drawer页面
 class MainDrawerPage extends StatefulWidget {
@@ -75,9 +77,11 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                   style: TextStyle(color: Theme.of(ctx).primaryColor, fontSize: 12.0),
                 ),
                 onPressed: () {
-                  //退出登录
+                  //退出登录,清空用户信息缓存即可
                   SpUtil.remove(BaseConstant.keyAppToken);
+                  Event.sendAppEvent(context, Constant.type_sys_update);
                   Navigator.pop(ctx);
+                  Navigator.pop(buildContext);
                 },
               )
             ],
@@ -92,7 +96,8 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
       if (!_pageInfoList.contains(_logout)) {
         _pageInfoList.add(_logout);
         UserModel userModel =
-            SpUtil.getObj(Constant.key_user_model, (v) => UserModel.fromJson(v));
+            SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
+        LogUtil.e("已登录信息：${userModel.toString()}");
         _userName = userModel?.username ?? "";
       }
     } else {

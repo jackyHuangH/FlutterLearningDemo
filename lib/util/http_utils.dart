@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_start/model/models.dart';
+import 'package:flutter_start/model/local_models.dart';
 
 ///模拟网络请求
 class HttpUtils {

@@ -4,7 +4,7 @@ import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/common/sp_helper.dart';
-import 'package:flutter_start/model/models.dart';
+import 'package:flutter_start/model/local_models.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/util/http_utils.dart';

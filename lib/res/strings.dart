@@ -41,6 +41,11 @@ class Ids {
   static const String user_register = 'user_register';
   static const String user_forget_pwd = 'user_forget_pwd';
   static const String user_new_user_hint = 'user_new_user_hint';
+  static const String user_login_name_empty = 'user_login_name_empty';
+  static const String user_login_pwd_empty = 'user_login_pwd_empty';
+  static const String user_login_name_length_too_short = 'user_login_name_length_too_short';
+  static const String user_login_pwd_length_too_short = 'user_login_pwd_length_too_short';
+  static const String user_login_success = 'user_login_success';
 
   static const String confirm = 'confirm';
   static const String cancel = 'cancel';
@@ -110,6 +115,11 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.confirm: 'Confirm',
       Ids.cancel: 'Cancel',
       Ids.jump_count: 'Jump %\$0\$s',
+      Ids.user_login_name_empty: 'User name is empty',
+      Ids.user_login_pwd_empty: 'Password is empty',
+      Ids.user_login_name_length_too_short: 'User name at least 6 words',
+      Ids.user_login_pwd_length_too_short: 'Password at least 6 words',
+      Ids.user_login_success: 'Login success',
     }
   },
   'zh': {
@@ -147,6 +157,11 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.confirm: '确认',
       Ids.cancel: '取消',
       Ids.jump_count: '跳过 %\$0\$s',
+      Ids.user_login_name_empty: '用户名不能为空',
+      Ids.user_login_pwd_empty: '密码不能为空',
+      Ids.user_login_name_length_too_short: '用户名至少6位',
+      Ids.user_login_pwd_length_too_short: '密码至少6位',
+      Ids.user_login_success: '登录成功',
     },
     'HK': {
       Ids.titleHome: '主頁',
@@ -178,6 +193,11 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.confirm: '确认',
       Ids.cancel: '取消',
       Ids.jump_count: '跳过 %\$0\$s',
+      Ids.user_login_name_empty: '用戶名不能為空',
+      Ids.user_login_pwd_empty: '密碼不能為空',
+      Ids.user_login_name_length_too_short: '用戶名至少6位',
+      Ids.user_login_pwd_length_too_short: '密碼至少6位',
+      Ids.user_login_success: '登錄成功',
     },
     'TW': {
       Ids.titleHome: '主頁',
@@ -209,6 +229,11 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.confirm: '确认',
       Ids.cancel: '取消',
       Ids.jump_count: '跳过 %\$0\$s',
+      Ids.user_login_name_empty: '用戶名不能為空',
+      Ids.user_login_pwd_empty: '密碼不能為空',
+      Ids.user_login_name_length_too_short: '用戶名至少6位',
+      Ids.user_login_pwd_length_too_short: '密碼至少6位',
+      Ids.user_login_success: '登錄成功',
     }
   }
 };

@@ -1,8 +1,13 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_start/common/common.dart';
+import 'package:flutter_start/event/event.dart';
+import 'package:flutter_start/model/protocol/models.dart';
+import 'package:flutter_start/model/repository/user_repository.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/widget/login_widget.dart';
+import 'package:rxdart/rxdart.dart';
 
 ///登录页
 class UserLoginPage extends StatelessWidget {
@@ -26,11 +31,55 @@ class UserLoginPage extends StatelessWidget {
 }
 
 class LoginBody extends StatelessWidget {
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    TextEditingController _userNameController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
+    UserRepository userRepository = UserRepository();
+    //显示历史用户名
+    UserModel historyUserModel =
+        SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
+    _userNameController.text = historyUserModel.username;
+
+    //登录
+    void _doLogin() {
+      String userName = _userNameController.text;
+      String password = _passwordController.text;
+      if (userName.isEmpty || userName.length < 6) {
+        Util.showSnackBar(
+            context,
+            IntlUtils.getString(
+                context,
+                userName.isEmpty
+                    ? Ids.user_login_name_empty
+                    : Ids.user_login_name_length_too_short));
+        return;
+      }
+      if (password.isEmpty || password.length < 6) {
+        Util.showSnackBar(
+            context,
+            IntlUtils.getString(
+                context,
+                password.isEmpty
+                    ? Ids.user_login_pwd_empty
+                    : Ids.user_login_pwd_length_too_short));
+        return;
+      }
+      LoginReq loginReq = new LoginReq(userName, password);
+      userRepository.login(loginReq).then((value) {
+        LogUtil.e("LoginResp data:${value.toString()}");
+        Util.showSnackBar(context, IntlUtils.getString(context, Ids.user_login_success));
+        //发送刷新数据通知，延迟跳转主页
+        Observable.just(1).delay(Duration(microseconds: 500)).listen((event) {
+          Event.sendAppEvent(context, Constant.type_refresh_all);
+          RouteUtil.goMain(context);
+        });
+      }).catchError((error) {
+        LogUtil.e("LoginResp error: ${error.toString()}");
+        Util.showSnackBar(context, error.toString());
+      });
+    }
+
     return new Column(children: <Widget>[
       Expanded(child: new Container()),
       Expanded(
@@ -81,33 +130,51 @@ class LoginBody extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        //TODO 登录
+                        //登录
+                        _doLogin();
                       },
                     ),
                   ),
                 ),
                 Gaps.vGap15,
-                Center(
-                  child: new Row(
-                    children: <Widget>[
-                      Text(
-                        IntlUtils.getString(context, Ids.user_new_user_hint),
-                        style: TextStyle(color: Colours.gray_66, fontSize: 14),
-                      ),
-                      Gaps.hGap5,
-                      GestureDetector(
-                        onTap: () {
-                          //todo 注册
-                        },
-                        child: Text(
-                          IntlUtils.getString(context, Ids.user_register),
+                InkWell(
+                  onTap: () {
+                    //todo 注册
+                  },
+                  child: new RichText(
+                    text: TextSpan(children: <TextSpan>[
+                      new TextSpan(
+                          style: TextStyle(color: Colours.gray_66, fontSize: 15),
+                          text: IntlUtils.getString(context, Ids.user_new_user_hint)),
+                      new TextSpan(
                           style: TextStyle(
-                              color: Theme.of(context).primaryColor, fontSize: 14.0),
-                        ),
-                      )
-                    ],
+                              color: Theme.of(context).primaryColor, fontSize: 15),
+                          text: IntlUtils.getString(context, Ids.user_register))
+                    ]),
                   ),
-                )
+                ),
+
+                ///RichText 取代row拼接两个textview更高效
+                /*new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      IntlUtils.getString(context, Ids.user_new_user_hint),
+                      style: TextStyle(color: Colours.gray_66, fontSize: 15),
+                    ),
+                    Gaps.hGap5,
+                    GestureDetector(
+                      onTap: () {
+                        //todo 注册
+                      },
+                      child: Text(
+                        IntlUtils.getString(context, Ids.user_register),
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor, fontSize: 15.0),
+                      ),
+                    )
+                  ],
+                )*/
               ],
             )),
       )

@@ -58,24 +58,6 @@ class SplashModel {
   }
 }
 
-//用户信息
-class UserModel {
-  String username;
-  String password;
-  String email;
-  String icon;
-  int id;
-
-  UserModel.fromJson(Map<String, dynamic> json)
-      : username = json["username"],
-        password = json["password"],
-        email = json["email"],
-        icon = json["icon"],
-        id = json["id"];
-
-  Map<String, dynamic> toJson() => {'username': username, 'password': password, 'email': email, 'icon': icon, 'id': id};
-}
-
 ///软件版本数据模型
 class VersionControlModel {
   String title;
