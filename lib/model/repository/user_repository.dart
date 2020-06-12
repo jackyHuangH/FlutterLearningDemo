@@ -1,7 +1,7 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/model/api/api.dart';
-import 'package:flutter_start/model/protocol/models.dart';
+import 'package:flutter_start/model/protocol/auth_models.dart';
 
 class UserRepository {
   //登录

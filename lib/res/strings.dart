@@ -43,9 +43,15 @@ class Ids {
   static const String user_new_user_hint = 'user_new_user_hint';
   static const String user_login_name_empty = 'user_login_name_empty';
   static const String user_login_pwd_empty = 'user_login_pwd_empty';
-  static const String user_login_name_length_too_short = 'user_login_name_length_too_short';
+  static const String user_login_re_pwd_empty = 'user_login_re_pwd_empty';
+  static const String user_login_name_length_too_short =
+      'user_login_name_length_too_short';
   static const String user_login_pwd_length_too_short = 'user_login_pwd_length_too_short';
+  static const String user_login_re_pwd_length_too_short =
+      'user_login_re_pwd_length_too_short';
   static const String user_login_success = 'user_login_success';
+  static const String user_register_success = 'user_register_success';
+  static const String user_register_pwd_not_equal = 'user_register_pwd_not_equal';
 
   static const String confirm = 'confirm';
   static const String cancel = 'cancel';
@@ -54,7 +60,7 @@ class Ids {
 }
 
 ///国际化常量
-Map<String,Map<String,String>> localizedSimpleValues={
+Map<String, Map<String, String>> localizedSimpleValues = {
   'en': {
     Ids.titleHome: 'Home',
     Ids.titleRepos: 'Repos',
@@ -117,9 +123,13 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.jump_count: 'Jump %\$0\$s',
       Ids.user_login_name_empty: 'User name is empty',
       Ids.user_login_pwd_empty: 'Password is empty',
+      Ids.user_login_re_pwd_empty: 'RePassword is empty',
       Ids.user_login_name_length_too_short: 'User name at least 6 words',
       Ids.user_login_pwd_length_too_short: 'Password at least 6 words',
+      Ids.user_login_re_pwd_length_too_short: 'RePassword at least 6 words',
       Ids.user_login_success: 'Login success',
+      Ids.user_register_success: 'Register success',
+      Ids.user_register_pwd_not_equal: 'Two passwords are inconsistent',
     }
   },
   'zh': {
@@ -159,9 +169,13 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.jump_count: '跳过 %\$0\$s',
       Ids.user_login_name_empty: '用户名不能为空',
       Ids.user_login_pwd_empty: '密码不能为空',
+      Ids.user_login_re_pwd_empty: '确认密码不能为空',
       Ids.user_login_name_length_too_short: '用户名至少6位',
       Ids.user_login_pwd_length_too_short: '密码至少6位',
+      Ids.user_login_re_pwd_length_too_short: '确认密码至少6位',
       Ids.user_login_success: '登录成功',
+      Ids.user_register_success: '注册成功',
+      Ids.user_register_pwd_not_equal: '两次密码不一致',
     },
     'HK': {
       Ids.titleHome: '主頁',
@@ -195,9 +209,13 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.jump_count: '跳过 %\$0\$s',
       Ids.user_login_name_empty: '用戶名不能為空',
       Ids.user_login_pwd_empty: '密碼不能為空',
+      Ids.user_login_re_pwd_empty: '確認密碼不能為空',
       Ids.user_login_name_length_too_short: '用戶名至少6位',
       Ids.user_login_pwd_length_too_short: '密碼至少6位',
+      Ids.user_login_re_pwd_length_too_short: '確認密碼至少6位',
       Ids.user_login_success: '登錄成功',
+      Ids.user_register_success: '註冊成功',
+      Ids.user_register_pwd_not_equal: '兩次密碼不一致',
     },
     'TW': {
       Ids.titleHome: '主頁',
@@ -231,9 +249,13 @@ Map<String, Map<String, Map<String, String>>> localizedValues = {
       Ids.jump_count: '跳过 %\$0\$s',
       Ids.user_login_name_empty: '用戶名不能為空',
       Ids.user_login_pwd_empty: '密碼不能為空',
+      Ids.user_login_re_pwd_empty: '確認密碼不能為空',
       Ids.user_login_name_length_too_short: '用戶名至少6位',
       Ids.user_login_pwd_length_too_short: '密碼至少6位',
+      Ids.user_login_re_pwd_length_too_short: '確認密碼至少6位',
       Ids.user_login_success: '登錄成功',
+      Ids.user_register_success: '註冊成功',
+      Ids.user_register_pwd_not_equal: '兩次密碼不一致',
     }
   }
 };

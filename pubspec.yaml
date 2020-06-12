@@ -38,7 +38,7 @@ dependencies:
   rxdart: ^0.22.6
 
   #  flutter toast
-  toast: ^0.1.5
+  fluttertoast: ^4.0.0
 
   #  基础开发工具包依赖，https://github.com/Sky24n/FlutterRepos
   base_library:

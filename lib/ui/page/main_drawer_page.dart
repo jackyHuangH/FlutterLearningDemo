@@ -3,21 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/collect_bloc.dart';
 import 'package:flutter_start/event/event.dart';
-import 'package:flutter_start/model/protocol/models.dart';
+import 'package:flutter_start/model/protocol/auth_models.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/about_page.dart';
 import 'package:flutter_start/ui/page/collection_page.dart';
-import 'package:flutter_start/ui/page/user_login_page.dart';
 import 'package:flutter_start/ui/page/main_demos_page.dart';
 import 'package:flutter_start/ui/page/setting_page.dart';
 import 'package:flutter_start/ui/page/share_page.dart';
+import 'package:flutter_start/ui/page/user/user_login_page.dart';
 import 'package:flutter_start/util/navigation_utils.dart';
 import 'package:flutter_start/util/utils.dart';
-import 'package:toast/toast.dart';
 
 import '../../common/common.dart';
-import '../../model/local_models.dart';
 
 ///首页drawer页面
 class MainDrawerPage extends StatefulWidget {
@@ -95,8 +93,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
       ///用户已登录
       if (!_pageInfoList.contains(_logout)) {
         _pageInfoList.add(_logout);
-        UserModel userModel =
-            SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
+        UserModel userModel = SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
         LogUtil.e("已登录信息：${userModel.toString()}");
         _userName = userModel?.username ?? "";
       }
@@ -114,8 +111,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
           new Container(
             height: 190.0,
             color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.only(
-                top: ScreenUtil.getStatusBarH(context), left: 20.0, right: 10.0),
+            padding: EdgeInsets.only(top: ScreenUtil.getStatusBarH(context), left: 20.0, right: 10.0),
             child: Stack(
               children: <Widget>[
                 Align(
@@ -129,9 +125,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image:
-                                    AssetImage(Utils.getImgPath("dog", format: 'jpg')))),
+                            image: DecorationImage(image: AssetImage(Utils.getImgPath("dog", format: 'jpg')))),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -142,10 +136,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                         },
                         child: Text(
                           _userName,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Gaps.vGap5,
@@ -158,15 +149,20 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      size: 16.0,
-                      color: Colors.white,
+                  child: Material(
+                    color: Theme.of(context).primaryColor,
+                    child: InkWell(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          size: 16.0,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Utils.showToast("功能暂未开放哦！");
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      Toast.show("功能暂未开放哦！", context);
-                    },
                   ),
                 )
               ],
@@ -179,8 +175,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                 child: InkWell(
                     onTap: () {
                       //跳转到Flutter Demo页面
-                      NavigationUtils.pushPage(context,
-                          page: MainDemoPage(), pageName: "Flutter Demos");
+                      NavigationUtils.pushPage(context, page: MainDemoPage(), pageName: "Flutter Demos");
                     },
                     child: new Center(
                       child: Text(

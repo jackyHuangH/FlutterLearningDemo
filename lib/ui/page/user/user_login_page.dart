@@ -2,10 +2,13 @@ import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/event/event.dart';
-import 'package:flutter_start/model/protocol/models.dart';
+import 'package:flutter_start/model/protocol/auth_models.dart';
 import 'package:flutter_start/model/repository/user_repository.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
+import 'package:flutter_start/ui/page/user/user_register_page.dart';
+import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/login_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -37,38 +40,29 @@ class LoginBody extends StatelessWidget {
     TextEditingController _passwordController = TextEditingController();
     UserRepository userRepository = UserRepository();
     //显示历史用户名
-    UserModel historyUserModel =
-        SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
-    _userNameController.text = historyUserModel.username;
-
+    UserModel historyUserModel = SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
+    if (historyUserModel != null) {
+      String historyName = historyUserModel.username;
+      _userNameController.text = historyName.isNotEmpty ? historyName : "";
+    }
     //登录
     void _doLogin() {
       String userName = _userNameController.text;
       String password = _passwordController.text;
       if (userName.isEmpty || userName.length < 6) {
-        Util.showSnackBar(
-            context,
-            IntlUtils.getString(
-                context,
-                userName.isEmpty
-                    ? Ids.user_login_name_empty
-                    : Ids.user_login_name_length_too_short));
+        Utils.showToast(IntlUtils.getString(
+            context, userName.isEmpty ? Ids.user_login_name_empty : Ids.user_login_name_length_too_short));
         return;
       }
       if (password.isEmpty || password.length < 6) {
-        Util.showSnackBar(
-            context,
-            IntlUtils.getString(
-                context,
-                password.isEmpty
-                    ? Ids.user_login_pwd_empty
-                    : Ids.user_login_pwd_length_too_short));
+        Utils.showToast(IntlUtils.getString(
+            context, password.isEmpty ? Ids.user_login_pwd_empty : Ids.user_login_pwd_length_too_short));
         return;
       }
       LoginReq loginReq = new LoginReq(userName, password);
       userRepository.login(loginReq).then((value) {
         LogUtil.e("LoginResp data:${value.toString()}");
-        Util.showSnackBar(context, IntlUtils.getString(context, Ids.user_login_success));
+        Utils.showToast(IntlUtils.getString(context, Ids.user_login_success));
         //发送刷新数据通知，延迟跳转主页
         Observable.just(1).delay(Duration(microseconds: 500)).listen((event) {
           Event.sendAppEvent(context, Constant.type_refresh_all);
@@ -76,7 +70,7 @@ class LoginBody extends StatelessWidget {
         });
       }).catchError((error) {
         LogUtil.e("LoginResp error: ${error.toString()}");
-        Util.showSnackBar(context, error.toString());
+        Utils.showToast(error.toString());
       });
     }
 
@@ -111,7 +105,7 @@ class LoginBody extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      Util.showSnackBar(context, "找回密码功能暂未开放！");
+                      Utils.showToast("找回密码功能暂未开放！");
                     },
                   ),
                 ),
@@ -139,7 +133,8 @@ class LoginBody extends StatelessWidget {
                 Gaps.vGap15,
                 InkWell(
                   onTap: () {
-                    //todo 注册
+                    //注册
+                    NavigationUtils.pushPage(context, page: UserRegisterPage());
                   },
                   child: new RichText(
                     text: TextSpan(children: <TextSpan>[
@@ -147,8 +142,7 @@ class LoginBody extends StatelessWidget {
                           style: TextStyle(color: Colours.gray_66, fontSize: 15),
                           text: IntlUtils.getString(context, Ids.user_new_user_hint)),
                       new TextSpan(
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor, fontSize: 15),
+                          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
                           text: IntlUtils.getString(context, Ids.user_register))
                     ]),
                   ),
