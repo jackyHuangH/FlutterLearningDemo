@@ -4,11 +4,11 @@ import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/common/sp_helper.dart';
-import 'package:flutter_start/model/local_models.dart';
+import 'package:flutter_start/model/protocol/common_models.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/util/http_utils.dart';
-import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -72,7 +72,7 @@ class SplashState extends State<SplashPage> {
     if (_splashModel != null) {
       setState(() {});
     }
-    HttpUtils.getSplash().then((model) {
+    HttpUtils().getSplash().then((model) {
       if (ObjectUtil.isNotEmpty(model.imgUrl)) {
         if (_splashModel == null || _splashModel.imgUrl != model.imgUrl) {
           SpHelper.putObject(Constant.key_splash_model, model);
@@ -196,7 +196,7 @@ class SplashState extends State<SplashPage> {
             return;
           }
           _goMain();
-          NavigationUtils.pushWeb(context, title: _splashModel.title, url: _splashModel.url);
+          NavigatorUtils.pushWeb(context, title: _splashModel.title, url: _splashModel.url);
         },
         child: Container(
           alignment: Alignment.center,

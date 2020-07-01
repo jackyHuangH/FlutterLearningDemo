@@ -12,7 +12,7 @@ import 'package:flutter_start/ui/page/main_demos_page.dart';
 import 'package:flutter_start/ui/page/setting_page.dart';
 import 'package:flutter_start/ui/page/share_page.dart';
 import 'package:flutter_start/ui/page/user/user_login_page.dart';
-import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 
 import '../../common/common.dart';
@@ -131,7 +131,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                         onTap: () {
                           //未登录，跳转登录
                           if (!Util.isLogin()) {
-                            NavigationUtils.pushPage(context, page: UserLoginPage());
+                            NavigatorUtils.pushPage(context, page: UserLoginPage());
                           }
                         },
                         child: Text(
@@ -175,7 +175,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                 child: InkWell(
                     onTap: () {
                       //跳转到Flutter Demo页面
-                      NavigationUtils.pushPage(context, page: MainDemoPage(), pageName: "Flutter Demos");
+                      NavigatorUtils.pushPage(context, page: MainDemoPage(), pageName: "Flutter Demos");
                     },
                     child: new Center(
                       child: Text(
@@ -200,7 +200,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                         _showLogoutDialog(context);
                       } else if (_pageInfo.titleId == Ids.titleCollection) {
                         //跳转到我的收藏页面
-                        NavigationUtils.pushPage(context,
+                        NavigatorUtils.pushPage(context,
                             page: BlocProvider<CollectBloc>(
                               child: _pageInfo.page,
                               bloc: CollectBloc(),
@@ -208,7 +208,7 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                             pageName: _pageInfo.titleId,
                             needLogin: Utils.isNeedLogin(_pageInfo.titleId));
                       } else {
-                        NavigationUtils.pushPage(context,
+                        NavigatorUtils.pushPage(context,
                             page: _pageInfo.page,
                             pageName: _pageInfo.titleId,
                             needLogin: Utils.isNeedLogin(_pageInfo.titleId));

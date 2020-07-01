@@ -8,14 +8,14 @@ import 'package:flutter_start/bloc/main_bloc.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/common/global.dart';
 import 'package:flutter_start/common/sp_helper.dart';
-import 'package:flutter_start/model/local_models.dart';
+import 'package:flutter_start/model/protocol/common_models.dart';
 import 'package:flutter_start/national/custom_localization.dart';
 import 'package:flutter_start/res/colors.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/main_page.dart';
 import 'package:flutter_start/ui/page/splash_page.dart';
 
-import 'model/local_models.dart';
+import 'model/protocol/common_models.dart';
 
 void main() {
   Global.init(() {

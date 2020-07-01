@@ -124,8 +124,8 @@ void main() {
     }
 
     //调用可选命名参数函数
-    enableFlag(bold: true);
-    enableFlag();
+    enableFlag("dds",bold: true);
+    enableFlag("ddd");
     //调用可选位置参数函数
     fun2('小明', '冲鸭！', '上海');
     fun3("小刚", 3, man: true);
@@ -136,9 +136,9 @@ void main() {
 //注意：在=> 和；之间只能出现的是一个表达式，而不能是一条语句
 void printElement(String e) => print("elment:$e \n");
 
-//可选命名参数 {param,param,...} 总结：所有参数均为可选
+//可选命名参数 {param,param,...} 总结：所有参数均为可选,必须放参数最后
 //函数可以使用=为命名参数和位置参数定义默认值。默认值必须是编译时常量。如果没有提供默认值，则默认值为null
-void enableFlag({bool bold, bool enable = false}) {
+void enableFlag(String name,{bool bold, bool enable = false}) {
   print("bold:$bold--enable:${enable}");
 }
 

@@ -62,6 +62,12 @@ dependencies:
   #第三方分享插件 share
   share: ^0.6.4+1
 
+  #  下拉刷新
+  pull_to_refresh: 1.1.6
+
+  # 汉字转拼音库 https://github.com/flutterchina/lpinyin
+  lpinyin: ^1.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

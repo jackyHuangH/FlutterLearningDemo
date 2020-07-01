@@ -7,7 +7,7 @@ import 'package:flutter_start/model/repository/user_repository.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/user/user_register_page.dart';
-import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/login_widget.dart';
 import 'package:rxdart/rxdart.dart';
@@ -134,7 +134,7 @@ class LoginBody extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     //注册
-                    NavigationUtils.pushPage(context, page: UserRegisterPage());
+                    NavigatorUtils.pushPage(context, page: UserRegisterPage());
                   },
                   child: new RichText(
                     text: TextSpan(children: <TextSpan>[

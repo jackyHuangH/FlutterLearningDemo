@@ -86,6 +86,7 @@ class VersionControlModel {
   }
 }
 
+///列表item公用数据模型
 class ComModel {
   String version;
   String title;
@@ -139,5 +140,30 @@ class ComModel {
   String toString() {
     return 'ComModel{version: $version, title: $title, content: $content, extra: $extra, url: $url, imgUrl: $imgUrl,'
         ' author: $author, updatedAt: $updatedAt, typeId: $typeId, titleId: $titleId, page: $page}';
+  }
+}
+
+///通用数据实体
+class ComData {
+  int size;
+  List datas;
+
+  ComData.fromJson(Map<String, dynamic> json)
+      : size = json["size"],
+        datas = json["datas"];
+}
+
+///通用请求参数
+class ComReq {
+  int cid;
+
+  ComReq(this.cid);
+
+  ComReq.fromJson(Map<String, dynamic> json) : cid = json["cid"];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "cid": this.cid,
+    };
   }
 }

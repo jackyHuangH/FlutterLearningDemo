@@ -1,14 +1,13 @@
 import 'package:base_library/base_library.dart';
-import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/model/api/api.dart';
 import 'package:flutter_start/model/protocol/auth_models.dart';
 
 class UserRepository {
   //登录
   Future<UserModel> login(LoginReq loginReq) async {
-    BaseRespR<Map<String, dynamic>> baseResp = await DioUtil.getInstance()
-        .requestR(Method.post, WanAndroidApi.USER_LOGIN, data: loginReq.toJson());
-    if (baseResp.code != Constant.status_success) {
+    BaseRespR<Map<String, dynamic>> baseResp =
+        await DioUtil.getInstance().requestR(Method.post, WanAndroidApi.USER_LOGIN, data: loginReq.toJson());
+    if (WanAndroidApi.isApiFailR(baseResp)) {
       return Future.error(baseResp.msg);
     }
 
@@ -27,12 +26,11 @@ class UserRepository {
     return userModel;
   }
 
-
   //注册
   Future<UserModel> register(RegisterReq req) async {
-    BaseRespR<Map<String, dynamic>> baseResp = await DioUtil.getInstance()
-        .requestR(Method.post, WanAndroidApi.USER_REGISTER, data: req.toJson());
-    if (baseResp.code != Constant.status_success) {
+    BaseRespR<Map<String, dynamic>> baseResp =
+        await DioUtil.getInstance().requestR(Method.post, WanAndroidApi.USER_REGISTER, data: req.toJson());
+    if (WanAndroidApi.isApiFailR(baseResp)) {
       return Future.error(baseResp.msg);
     }
 

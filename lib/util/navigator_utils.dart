@@ -5,7 +5,7 @@ import 'package:flutter_start/ui/page/user/user_login_page.dart';
 import 'package:flutter_start/widget/web_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NavigationUtils {
+class NavigatorUtils {
 
   static void pushPage(BuildContext context, {@required Widget page, String pageName, bool needLogin: false}) {
     if (context == null || page == null) {

@@ -8,7 +8,7 @@ import 'package:flutter_start/ui/page/main_drawer_page.dart';
 import 'package:flutter_start/ui/page/repos_page.dart';
 import 'package:flutter_start/ui/page/search_page.dart';
 import 'package:flutter_start/ui/page/system_page.dart';
-import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 
 final List<_Page> _allPages = <_Page>[
   _Page(Ids.titleHome),
@@ -58,7 +58,7 @@ class MainPage extends StatelessWidget {
               icon: Icon(Icons.search),
               onPressed: () {
                 //搜索
-                NavigationUtils.pushPage(context, page: SearchPage(), pageName: "SearchPage");
+                NavigatorUtils.pushPage(context, page: SearchPage(), pageName: "SearchPage");
               },
             )
           ],
@@ -91,16 +91,16 @@ class TabBarViewLayout extends StatelessWidget {
     Widget target;
     switch (_labelId) {
       case Ids.titleHome:
-        target = HomePage();
+        target = HomePage(labelId: _labelId);
         break;
       case Ids.titleRepos:
-        target = ReposPage();
+        target = ReposPage(labelId: _labelId);
         break;
       case Ids.titleEvents:
-        target = EventsPage();
+        target = EventsPage(labelId: _labelId);
         break;
       case Ids.titleSystem:
-        target = SystemPage();
+        target = SystemPage(labelId: _labelId);
         break;
       default:
         target = Container();

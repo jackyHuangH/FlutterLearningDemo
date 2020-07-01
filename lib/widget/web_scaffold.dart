@@ -1,7 +1,7 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/national/intl_util.dart';
-import 'package:flutter_start/util/navigation_utils.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/widget/likebtn/like_button.dart';
 import 'package:share/share.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -23,7 +23,7 @@ class _WebScaffoldState extends State<WebScaffold> {
     String _title = widget.title ?? IntlUtils.getString(context, widget.titleId);
     switch (value) {
       case "browser":
-        NavigationUtils.launchInBrowser(widget.url, title: _title);
+        NavigatorUtils.launchInBrowser(widget.url, title: _title);
         break;
       case "share":
         Share.share('$_title:${widget.url}');
