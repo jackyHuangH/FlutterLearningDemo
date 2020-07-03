@@ -41,10 +41,11 @@ class HomePage extends StatelessWidget {
         interval: const Duration(seconds: 3),
         indicator: NumberSwipeIndicator(),
         children: bannerList.map((item) {
-          return Material(
+          return SafeArea(
             child: new InkWell(
               onTap: () {
-                //TODO banner点击
+                //banner点击
+                NavigatorUtils.pushWeb(context, title: item.title, url: item.url);
               },
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
@@ -79,7 +80,8 @@ class HomePage extends StatelessWidget {
       leftIcon: Icons.book,
       titleId: Ids.recRepos,
       tapCallback: () {
-        //todo 跳转
+        //跳转项目tab页面
+        NavigatorUtils.pushTabPage(context, labelId: Ids.titleReposTree, titleId: Ids.titleReposTree);
       },
     ));
     children.addAll(_itemList);
@@ -109,7 +111,8 @@ class HomePage extends StatelessWidget {
       leftIcon: Icons.library_books,
       titleId: Ids.recWxArticle,
       tapCallback: () {
-        //todo 跳转文章详情
+        //跳转微信文章tab页面
+        NavigatorUtils.pushTabPage(context, labelId: Ids.titleWxArticleTree, titleId: Ids.titleWxArticleTree);
       },
     ));
     children.addAll(_articleList);

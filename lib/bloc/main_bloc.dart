@@ -8,29 +8,23 @@ import 'package:flutter_start/model/protocol/home_models.dart';
 import 'package:flutter_start/model/repository/wan_repository.dart';
 import 'package:flutter_start/res/index.dart';
 import 'package:flutter_start/util/http_utils.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MainBloc implements BlocBase {
-  ///-----------------home--------------------------//
+  ///----------------common,用于控制分页加载--------------------
   BehaviorSubject<StatusEvent> _homeEvent = BehaviorSubject<StatusEvent>();
 
   Stream<StatusEvent> get homeEventStream => _homeEvent.stream.asBroadcastStream();
 
   Sink<StatusEvent> get homeEventSink => _homeEvent.sink;
 
+  ///-----------------home--------------------------//
   BehaviorSubject<List<BannerModel>> _bannerEvent = BehaviorSubject<List<BannerModel>>();
 
   Stream<List<BannerModel>> get bannerStream => _bannerEvent.stream;
 
   Sink<List<BannerModel>> get _bannerSink => _bannerEvent.sink;
-
-  BehaviorSubject<ComModel> _recItem = BehaviorSubject<ComModel>();
-
-  Stream<ComModel> get recItemStream => _recItem.stream.asBroadcastStream();
-
-  Sink<ComModel> get _recItemSink => _recItem.sink;
-
-  ComModel hotRecModel;
 
   BehaviorSubject<List<ReposModel>> _recRepos = BehaviorSubject<List<ReposModel>>();
 
@@ -44,8 +38,35 @@ class MainBloc implements BlocBase {
 
   Sink<List<ReposModel>> get _recWxArticleSink => _recWxArticles.sink;
 
-  ///------------------repos-----------------------------
+  ///-------------------repos项目----------------------------
+  BehaviorSubject<List<ReposModel>> _reposData = BehaviorSubject<List<ReposModel>>();
+
+  Stream<List<ReposModel>> get reposStream => _reposData.stream;
+
+  Sink<List<ReposModel>> get _reposSink => _reposData.sink;
+
+  List<ReposModel> _reposList;
   int _reposPage = 0;
+
+  ///-------------------events动态----------------------------
+  BehaviorSubject<List<ReposModel>> _eventsData = BehaviorSubject<List<ReposModel>>();
+
+  Stream<List<ReposModel>> get eventsStream => _eventsData.stream;
+
+  Sink<List<ReposModel>> get _eventsSink => _eventsData.sink;
+
+  List<ReposModel> _eventsList;
+  int _eventsPage = 0;
+
+  ///-----------------personal-----------------------
+
+  BehaviorSubject<ComModel> _recItem = BehaviorSubject<ComModel>();
+
+  Stream<ComModel> get recItemStream => _recItem.stream.asBroadcastStream();
+
+  Sink<ComModel> get _recItemSink => _recItem.sink;
+
+  ComModel hotRecModel;
 
   ///*******************************************//
   WanRepository wanRepository = new WanRepository();
@@ -57,6 +78,12 @@ class MainBloc implements BlocBase {
       case Ids.titleHome:
         return getHomeData(labelId);
         break;
+      case Ids.titleRepos:
+        return getArticleListProject(labelId, page);
+        break;
+      case Ids.titleEvents:
+        return getEventArticleList(labelId, page);
+        break;
       default:
         return Future.delayed(new Duration(seconds: 1));
         break;
@@ -65,8 +92,20 @@ class MainBloc implements BlocBase {
 
   @override
   Future onLoadMore({String labelId}) {
-    // TODO: implement onLoadMore
-    return null;
+    int _page = 0;
+    switch (labelId) {
+      case Ids.titleHome:
+        break;
+      case Ids.titleRepos:
+        _page = ++_reposPage;
+        break;
+      case Ids.titleEvents:
+        _page = ++_eventsPage;
+        break;
+      default:
+        break;
+    }
+    return getData(labelId: labelId, page: _page);
   }
 
   @override
@@ -74,6 +113,12 @@ class MainBloc implements BlocBase {
     switch (labelId) {
       case Ids.titleHome:
         getHotRecItem();
+        break;
+      case Ids.titleRepos:
+        _reposPage = 0;
+        break;
+      case Ids.titleEvents:
+        _eventsPage = 0;
         break;
       default:
         break;
@@ -115,13 +160,47 @@ class MainBloc implements BlocBase {
   }
 
   ///获取首页推荐微信公众号列表，只取6条
-  void getRecWxArticles(String labelId) async {
+  Future getRecWxArticles(String labelId) async {
     int _id = 408;
     wanRepository.getWxArticleList(id: _id).then((list) {
       if (list.length > 6) {
         list = list.sublist(0, 6);
       }
       _recWxArticleSink.add(UnmodifiableListView<ReposModel>(list));
+    });
+  }
+
+  ///获取Tab项目列表
+  Future getArticleListProject(String labelId, int page) async {
+    return wanRepository.getArticleListProject(page).then((list) {
+      if (_reposList == null) _reposList = new List();
+      if (page == 0) _reposList.clear();
+      _reposList.addAll(list);
+      _reposSink.add(new UnmodifiableListView<ReposModel>(_reposList));
+      homeEventSink.add(new StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle));
+    }).catchError((e) {
+      if (ObjectUtil.isEmpty(_reposList)) {
+        _reposData.sink.addError("error:list is empty");
+      }
+      _reposPage--;
+      homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
+  ///获取Tab动态列表
+  Future getEventArticleList(String labelId, int page) async {
+    return wanRepository.getArticleList(page: page).then((list) {
+      if (_eventsList == null) _eventsList = new List();
+      if (page == 0) _eventsList.clear();
+      _eventsList.addAll(list);
+      _eventsSink.add(new UnmodifiableListView<ReposModel>(_eventsList));
+      homeEventSink.add(new StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle));
+    }).catchError((e) {
+      if (ObjectUtil.isEmpty(_eventsList)) {
+        _eventsData.sink.addError("error:list is empty");
+      }
+      _eventsPage--;
+      homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
     });
   }
 
@@ -133,5 +212,7 @@ class MainBloc implements BlocBase {
     _recItem.close();
     _recRepos.close();
     _recWxArticles.close();
+    _reposData.close();
+    _eventsData.close();
   }
 }

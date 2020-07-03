@@ -68,6 +68,10 @@ dependencies:
   # 汉字转拼音库 https://github.com/flutterchina/lpinyin
   lpinyin: ^1.0.9
 
+  # Flutter 城市列表 https://github.com/flutterchina/azlistview
+  azlistview: ^0.1.2
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

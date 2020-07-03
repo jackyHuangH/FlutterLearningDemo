@@ -1,6 +1,7 @@
 import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/model/protocol/home_models.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/widgets.dart';
 
@@ -18,7 +19,8 @@ class ArticleItem extends StatelessWidget {
       color: Colors.white,
       child: InkWell(
         onTap: () {
-          //todo 跳转文章详情
+          //跳转文章详情
+          NavigatorUtils.pushWeb(context, title: model.title, url: model.link, isHome: isHome);
         },
         child: Container(
           padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0, bottom: 10.0),

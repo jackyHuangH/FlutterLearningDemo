@@ -23,5 +23,5 @@ class StatusEvent {
   int status;
   int cid;
 
-  StatusEvent(this.labelId, this.status, this.cid);
+  StatusEvent(this.labelId, this.status, {this.cid});
 }

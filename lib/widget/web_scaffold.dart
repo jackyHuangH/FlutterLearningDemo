@@ -36,8 +36,7 @@ class _WebScaffoldState extends State<WebScaffold> {
   }
 
   ///获取弹窗菜单menuItem
-  PopupMenuItem _getPopupMenuItem(String text, IconData iconData) =>
-      PopupMenuItem(
+  PopupMenuItem<String> _getPopupMenuItem(String text, IconData iconData) => PopupMenuItem<String>(
         value: 'browser',
         child: ListTile(
           contentPadding: EdgeInsets.all(0.0),
@@ -80,11 +79,10 @@ class _WebScaffoldState extends State<WebScaffold> {
           PopupMenuButton(
               padding: const EdgeInsets.all(0.0),
               onSelected: _onPopSelected,
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuItem<String>>[
-                _getPopupMenuItem('浏览器打开', Icons.language),
-                _getPopupMenuItem('分享', Icons.share)
-              ]),
+              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                    _getPopupMenuItem('浏览器打开', Icons.language),
+                    _getPopupMenuItem('分享', Icons.share)
+                  ]),
         ],
       ),
       body: WebView(

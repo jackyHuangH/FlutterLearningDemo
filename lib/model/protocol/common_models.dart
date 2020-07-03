@@ -1,3 +1,4 @@
+import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 
 ///国际化语言数据模型
@@ -165,5 +166,39 @@ class ComReq {
     return {
       "cid": this.cid,
     };
+  }
+}
+
+///树形数据实体
+class TreeModel extends ISuspensionBean{
+  int id;
+  String name;
+  List<TreeModel> children;
+
+  String tagIndex;
+
+  TreeModel.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        name = json["name"],
+        children = (json["children"] as List)
+            ?.map((e) => e == null ? null : new TreeModel.fromJson(e as Map<String, dynamic>))
+            ?.toList();
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "name": this.name,
+      "children": this.children,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'TreeModel{id: $id, tagIndex: $tagIndex, name: $name, children: $children}';
+  }
+
+  @override
+  String getSuspensionTag() {
+    return tagIndex;
   }
 }

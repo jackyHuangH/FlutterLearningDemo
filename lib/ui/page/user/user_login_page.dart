@@ -159,7 +159,8 @@ class LoginBody extends StatelessWidget {
                     Gaps.hGap5,
                     GestureDetector(
                       onTap: () {
-                        //todo 注册
+                        //注册
+                        NavigatorUtils.pushPage(context, page: UserRegisterPage());
                       },
                       child: Text(
                         IntlUtils.getString(context, Ids.user_register),

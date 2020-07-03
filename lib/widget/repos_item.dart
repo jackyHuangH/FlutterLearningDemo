@@ -2,6 +2,7 @@ import 'package:base_library/base_library.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/model/protocol/home_models.dart';
+import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/widgets.dart';
 
@@ -19,7 +20,8 @@ class ReposItem extends StatelessWidget {
       color: Colors.white,
       child: new InkWell(
         onTap: () {
-          //todo 点击跳转文章详情
+          //点击跳转文章详情
+          NavigatorUtils.pushWeb(context, title: model.title, url: model.link, isHome: isHome);
         },
         child: new Container(
           padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 10),
@@ -71,6 +73,7 @@ class ReposItem extends StatelessWidget {
                 width: 72,
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(left: 10.0),
+                /*child: FadeInImage.assetNetwork(placeholder: "images/pic_def.png", image: model.envelopePic),*/
                 child: new CachedNetworkImage(
                   imageUrl: model.envelopePic,
                   height: 128.0,

@@ -24,8 +24,8 @@ class RefreshScaffold extends StatefulWidget {
       {Key key,
       this.labelId,
       this.loadStatus,
-      this.refreshController,
-      this.enablePullUp,
+      @required this.refreshController,
+      this.enablePullUp = true,//允许上拉加载更多
       this.onRefresh,
       this.onLoadMore,
       this.child,
