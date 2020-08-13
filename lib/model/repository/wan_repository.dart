@@ -117,4 +117,18 @@ class WanRepository {
     }
     return treeList;
   }
+
+  ///获取体系树数据
+  Future<List<TreeModel>> getTree() async{
+    BaseResp<List> baseResp=await DioUtil.getInstance()
+        .request<List>(Method.get, WanAndroidApi.getRequestUrl(path: WanAndroidApi.TREE));
+    List<TreeModel> treeList;
+    if(WanAndroidApi.isApiFail(baseResp)){
+      return Future.error(baseResp.msg);
+    }
+    if(baseResp.data!=null){
+      treeList=baseResp.data.map((e) => TreeModel.fromJson(e)).toList();
+    }
+    return treeList;
+  }
 }

@@ -25,7 +25,8 @@ class NavigatorUtils {
   }
 
   ///跳转到tab+viewpager页面
-  static void pushTabPage(BuildContext context, {String labelId, String title, String titleId, TreeModel treeModel}) {
+  static void pushTabPage(BuildContext context,
+      {String labelId, String title, String titleId, TreeModel treeModel, bool enablePullUp = true}) {
     if (context == null) {
       return;
     }
@@ -36,6 +37,7 @@ class NavigatorUtils {
           titleId: titleId,
           title: title,
           treeModel: treeModel,
+          enablePullUp: enablePullUp,
         ),
         bloc: new TabBloc(),
       );

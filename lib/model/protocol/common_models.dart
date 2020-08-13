@@ -175,7 +175,7 @@ class TreeModel extends ISuspensionBean{
   String name;
   List<TreeModel> children;
 
-  String tagIndex;
+  String tagIndex;//标签排序
 
   TreeModel.fromJson(Map<String, dynamic> json)
       : id = json["id"],

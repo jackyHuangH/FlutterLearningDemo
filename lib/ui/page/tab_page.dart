@@ -14,8 +14,10 @@ class TabPage extends StatefulWidget {
   final String title;
   final String titleId;
   final TreeModel treeModel;
+  final bool enablePullUp;
 
-  const TabPage({this.labelId, this.title, this.titleId, this.treeModel, Key key}) : super(key: key);
+  const TabPage({this.labelId, this.title, this.titleId, this.treeModel, this.enablePullUp = true, Key key})
+      : super(key: key);
 
   @override
   _TabPageState createState() => _TabPageState();
@@ -53,6 +55,7 @@ class _TabPageState extends State<TabPage> {
                   child: new ComListPage(
                     labelId: widget.labelId,
                     cid: treeModel.id,
+                    enablePullUp: widget.enablePullUp,
                   ),
                   bloc: new ComListBloc()))
               .cast<BlocProvider<ComListBloc>>()

@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:azlistview/azlistview.dart';
 import 'package:base_library/base_library.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/event/event.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_start/model/protocol/home_models.dart';
 import 'package:flutter_start/model/repository/wan_repository.dart';
 import 'package:flutter_start/res/index.dart';
 import 'package:flutter_start/util/http_utils.dart';
+import 'package:flutter_start/util/utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -58,6 +60,15 @@ class MainBloc implements BlocBase {
   List<ReposModel> _eventsList;
   int _eventsPage = 0;
 
+  ///-------------------system体系----------------------------
+  BehaviorSubject<List<TreeModel>> _treeData = BehaviorSubject<List<TreeModel>>();
+
+  Stream<List<TreeModel>> get treeStream => _treeData.stream;
+
+  Sink<List<TreeModel>> get _treeSink => _treeData.sink;
+
+  List<TreeModel> _treeList;
+
   ///-----------------personal-----------------------
 
   BehaviorSubject<ComModel> _recItem = BehaviorSubject<ComModel>();
@@ -84,6 +95,9 @@ class MainBloc implements BlocBase {
       case Ids.titleEvents:
         return getEventArticleList(labelId, page);
         break;
+      case Ids.titleSystem:
+        return getTree(labelId);
+        break;
       default:
         return Future.delayed(new Duration(seconds: 1));
         break;
@@ -102,6 +116,8 @@ class MainBloc implements BlocBase {
       case Ids.titleEvents:
         _page = ++_eventsPage;
         break;
+      case Ids.titleSystem:
+        break;
       default:
         break;
     }
@@ -119,6 +135,8 @@ class MainBloc implements BlocBase {
         break;
       case Ids.titleEvents:
         _eventsPage = 0;
+        break;
+      case Ids.titleSystem:
         break;
       default:
         break;
@@ -204,6 +222,34 @@ class MainBloc implements BlocBase {
     });
   }
 
+  ///获取Tab体系列表
+  Future getTree(String labelId) async {
+    return wanRepository.getTree().then((list) {
+      if (_treeList == null) _treeList = new List();
+      //按拼音首字母重新排序
+      for (int i = 0, size = list.length; i < size; i++) {
+        TreeModel model = list[i];
+        String tag = Utils.getPinyin(model.name);
+        if (RegExp("[A-Z]").hasMatch(tag)) {
+          list[i].tagIndex = tag;
+        } else {
+          list[i].tagIndex = "#";
+        }
+      }
+      SuspensionUtil.sortListBySuspensionTag(list);
+
+      _treeList.clear();
+      _treeList.addAll(list);
+      _treeSink.add(new UnmodifiableListView<TreeModel>(_treeList));
+      homeEventSink.add(new StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle));
+    }).catchError((e) {
+      if (ObjectUtil.isEmpty(_treeList)) {
+        _treeData.sink.addError("error:list is empty");
+      }
+      homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
   @override
   void dispose() {
     //释放资源
@@ -214,5 +260,6 @@ class MainBloc implements BlocBase {
     _recWxArticles.close();
     _reposData.close();
     _eventsData.close();
+    _treeData.close();
   }
 }

@@ -15,8 +15,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ComListPage extends StatelessWidget {
   final String labelId;
   final int cid;
-
-  const ComListPage({this.labelId, this.cid, Key key}) : super(key: key);
+  final bool enablePullUp; //是否允许加载更多，分页
+  const ComListPage({this.labelId, this.cid, this.enablePullUp = true, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,11 @@ class ComListPage extends StatelessWidget {
             onRefresh: ({bool isReload}) {
               return bloc.onRefresh(labelId: labelId, cid: cid);
             },
+            enablePullUp: this.enablePullUp,
             onLoadMore: (up) {
-              bloc.onLoadMore(labelId: labelId, cid: cid);
+              if (enablePullUp) {
+                bloc.onLoadMore(labelId: labelId, cid: cid);
+              }
             },
             itemCount: snapshot.data == null ? 0 : snapshot.data.length,
             itemBuilder: (context, index) {
