@@ -173,7 +173,7 @@ class HomePage extends StatelessWidget {
                       extra: updateStatus == 0 ? 'Go' : '',
                       tapCallback: () {
                         if (updateStatus == 0) {
-                          //todo 跳转
+                          //todo 跳转热门页面
 //                        NavigatorUtils.pushPage(context, page: null)
                         } else {
                           NavigatorUtils.launchInBrowser(hotRecModel.url, title: hotRecModel.title);

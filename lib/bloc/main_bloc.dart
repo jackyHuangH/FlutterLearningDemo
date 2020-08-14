@@ -6,6 +6,7 @@ import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/event/event.dart';
 import 'package:flutter_start/model/protocol/common_models.dart';
 import 'package:flutter_start/model/protocol/home_models.dart';
+import 'package:flutter_start/model/repository/collect_repository.dart';
 import 'package:flutter_start/model/repository/wan_repository.dart';
 import 'package:flutter_start/res/index.dart';
 import 'package:flutter_start/util/http_utils.dart';
@@ -80,8 +81,9 @@ class MainBloc implements BlocBase {
   ComModel hotRecModel;
 
   ///*******************************************//
-  WanRepository wanRepository = new WanRepository();
+  WanRepository _wanRepository = new WanRepository();
   HttpUtils httpUtils = new HttpUtils();
+  CollectRepository _collectRepository = new CollectRepository();
 
   @override
   Future getData({String labelId, int page}) {
@@ -160,7 +162,7 @@ class MainBloc implements BlocBase {
 
   //获取banner列表
   Future getBanner() {
-    return wanRepository.getBanner().then((list) {
+    return _wanRepository.getBanner().then((list) {
       _bannerSink.add(UnmodifiableListView<BannerModel>(list));
     });
   }
@@ -168,7 +170,7 @@ class MainBloc implements BlocBase {
   ///获取首页推荐项目列表6条
   Future getRecRepos(String labelId) async {
     ComReq _comReq = new ComReq(402);
-    wanRepository.getProjectList(data: _comReq.toJson()).then((list) {
+    _wanRepository.getProjectList(data: _comReq.toJson()).then((list) {
       //只截取前6条
       if (list.length > 6) {
         list = list.sublist(0, 6);
@@ -180,7 +182,7 @@ class MainBloc implements BlocBase {
   ///获取首页推荐微信公众号列表，只取6条
   Future getRecWxArticles(String labelId) async {
     int _id = 408;
-    wanRepository.getWxArticleList(id: _id).then((list) {
+    _wanRepository.getWxArticleList(id: _id).then((list) {
       if (list.length > 6) {
         list = list.sublist(0, 6);
       }
@@ -190,7 +192,7 @@ class MainBloc implements BlocBase {
 
   ///获取Tab项目列表
   Future getArticleListProject(String labelId, int page) async {
-    return wanRepository.getArticleListProject(page).then((list) {
+    return _wanRepository.getArticleListProject(page).then((list) {
       if (_reposList == null) _reposList = new List();
       if (page == 0) _reposList.clear();
       _reposList.addAll(list);
@@ -207,7 +209,7 @@ class MainBloc implements BlocBase {
 
   ///获取Tab动态列表
   Future getEventArticleList(String labelId, int page) async {
-    return wanRepository.getArticleList(page: page).then((list) {
+    return _wanRepository.getArticleList(page: page).then((list) {
       if (_eventsList == null) _eventsList = new List();
       if (page == 0) _eventsList.clear();
       _eventsList.addAll(list);
@@ -224,7 +226,7 @@ class MainBloc implements BlocBase {
 
   ///获取Tab体系列表
   Future getTree(String labelId) async {
-    return wanRepository.getTree().then((list) {
+    return _wanRepository.getTree().then((list) {
       if (_treeList == null) _treeList = new List();
       //按拼音首字母重新排序
       for (int i = 0, size = list.length; i < size; i++) {
@@ -248,6 +250,45 @@ class MainBloc implements BlocBase {
       }
       homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
     });
+  }
+
+  ///收藏，取消收藏
+  void doCollect(int id, bool isCollect) {
+    if (isCollect) {
+      _collectRepository.collect(id).then((ok) {
+        if (ok) {
+          afterCollectStateChanged(id, isCollect);
+        }
+      });
+    } else {
+      _collectRepository.unCollect(id).then((ok) {
+        if (ok) {
+          afterCollectStateChanged(id, isCollect);
+        }
+      });
+    }
+  }
+
+  ///收藏，取消收藏后刷新列表
+  void afterCollectStateChanged(int id, bool isCollect) {
+    if (!ObjectUtil.isEmpty(_reposList)) {
+      _reposList?.forEach((model) {
+        if (id == model.id) {
+          model.collect = isCollect;
+        }
+        return model;
+      });
+      _reposSink.add(UnmodifiableListView<ReposModel>(_reposList));
+    }
+    if (!ObjectUtil.isEmpty(_eventsList)) {
+      _eventsList?.forEach((model) {
+        if (id == model.id) {
+          model.collect = isCollect;
+        }
+        return model;
+      });
+      _eventsSink.add(UnmodifiableListView<ReposModel>(_eventsList));
+    }
   }
 
   @override

@@ -117,8 +117,8 @@ class LikeBtn extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (Util.isLogin()) {
-          //todo 收藏
-
+          //收藏,取消收藏
+          bloc.doCollect(id, !isLike);
         } else {
           //未登录，跳转登录页
           NavigatorUtils.pushPage(context, page: UserLoginPage(), pageName: "UserLoginPage");
