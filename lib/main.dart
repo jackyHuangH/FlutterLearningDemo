@@ -80,18 +80,20 @@ class MyAppState extends State<MyApp> {
 
   ///加载国际化配置
   void _loadLocale() {
-    LanguageModel languageModel = SpUtil.getObj(Constant.keyLanguage, (v) => LanguageModel.fromJson(v));
-    if (languageModel != null) {
-      _locale = Locale(languageModel.languageCode, languageModel.countryCode);
-    } else {
-      _locale = null;
-    }
+    setState(() {
+      LanguageModel languageModel = SpUtil.getObj(Constant.keyLanguage, (v) => LanguageModel.fromJson(v));
+      if (languageModel != null) {
+        _locale = Locale(languageModel.languageCode, languageModel.countryCode);
+      } else {
+        _locale = null;
+      }
 
-    //主题色加载
-    String _colorKey = SpHelper.getThemeColor();
-    if (themeColorMap[_colorKey] != null) {
-      _themeColor = themeColorMap[_colorKey];
-    }
+      //主题色加载
+      String _colorKey = SpHelper.getThemeColor();
+      if (themeColorMap[_colorKey] != null) {
+        _themeColor = themeColorMap[_colorKey];
+      }
+    });
   }
 
   @override

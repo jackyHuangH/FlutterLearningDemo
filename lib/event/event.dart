@@ -6,7 +6,7 @@ class Event {
   static void sendAppCommonEvent(BuildContext context, CommonEvent event) {}
 
   static void sendAppEvent(BuildContext context, int id) {
-    BlocProvider.of<ApplicationBloc>(context).sendEvent(id);
+    BlocProvider.of<ApplicationBloc>(context).sendAppEvent(id);
   }
 }
 

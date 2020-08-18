@@ -17,7 +17,7 @@ class ApplicationBloc implements BlocBase {
   }
 
   ///发送事件
-  void sendEvent(int type) {
+  void sendAppEvent(int type) {
     _appEventSink.add(type);
   }
 
