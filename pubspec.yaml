@@ -69,7 +69,7 @@ dependencies:
   lpinyin: ^1.0.9
 
   # Flutter 城市列表 https://github.com/flutterchina/azlistview
-  azlistview: ^0.1.2
+  azlistview: ^1.0.2
 
 
 dev_dependencies:
@@ -97,6 +97,8 @@ flutter:
     - assets/images/splash_bg.png
     - assets/images/girl.png
     - assets/images/dog.jpg
+    -
+    - assets/data/china.json
 
     - packages/base_library/assets/ic_data_empty.png
     - packages/base_library/assets/ic_login_bg.png

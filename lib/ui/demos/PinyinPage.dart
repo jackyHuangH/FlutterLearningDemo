@@ -21,7 +21,7 @@ class PinyinPage extends StatefulWidget {
 }
 
 class _PinyinPageState extends State<PinyinPage> {
-  List<PinyinTypeModel> _typeList = new List();
+  List<PinyinTypeModel> _typeList =new List();
   final textEditController = new TextEditingController();
   WidgetUtil _widgetUtil = WidgetUtil();
 
@@ -111,7 +111,7 @@ class _PinyinPageState extends State<PinyinPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0, bottom: 20.0),
+            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 15.0),
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(width: 0.5, color: Colours.divider),
@@ -126,6 +126,9 @@ class _PinyinPageState extends State<PinyinPage> {
                         children: <Widget>[
                           Text(
                             model.name,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            softWrap: false,
                             style: TextStyle(fontSize: 13.0),
                           ),
                           Radio(
@@ -162,7 +165,7 @@ class _PinyinPageState extends State<PinyinPage> {
           ),
         ],
       ),
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
     );
   }
 }

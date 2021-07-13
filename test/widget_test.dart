@@ -124,7 +124,7 @@ void main() {
     }
 
     //调用可选命名参数函数
-    enableFlag("dds",bold: true);
+    enableFlag("dds", bold: true);
     enableFlag("ddd");
     //调用可选位置参数函数
     fun2('小明', '冲鸭！', '上海');
@@ -138,7 +138,7 @@ void printElement(String e) => print("elment:$e \n");
 
 //可选命名参数 {param,param,...} 总结：所有参数均为可选,必须放参数最后
 //函数可以使用=为命名参数和位置参数定义默认值。默认值必须是编译时常量。如果没有提供默认值，则默认值为null
-void enableFlag(String name,{bool bold, bool enable = false}) {
+void enableFlag(String name, {bool bold, bool enable = false}) {
   print("bold:$bold--enable:${enable}");
 }
 
@@ -148,8 +148,8 @@ void fun2(String who, String word, [String place = '北京', int year = 2019]) {
   if (place != null) {
     result = "$result at $place";
   }
-  if(year!=null){
-    result="$result in $year";
+  if (year != null) {
+    result = "$result in $year";
   }
   print(result);
 }
@@ -160,6 +160,17 @@ void fun3(String name, int age, {bool man: false}) {
 }
 
 class Person {
+  String name;
+  int age;
+
+  Person();
+
+  //命名构造函数
+  Person.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    age = json['age'];
+  }
+
   void eat() {
     print("eating...");
   }
