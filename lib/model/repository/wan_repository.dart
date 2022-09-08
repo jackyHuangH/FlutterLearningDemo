@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:base_library/base_library.dart';
 import 'package:flutter_start/model/api/api.dart';
 import 'package:flutter_start/model/protocol/common_models.dart';
 import 'package:flutter_start/model/protocol/home_models.dart';
+
+import '../../baselib/data/net/dio_util.dart';
+import '../../baselib/data/protocol/base_resp.dart';
 
 class WanRepository {
 

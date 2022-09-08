@@ -1,9 +1,10 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/ui/demos/CitySelectPage.dart';
 import 'package:flutter_start/ui/demos/DatePage.dart';
 import 'package:flutter_start/ui/demos/PinyinPage.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
+
+import '../../baselib/res/colors.dart';
 
 class DemoItemModel {
   String title;

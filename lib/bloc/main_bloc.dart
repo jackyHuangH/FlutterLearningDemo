@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:azlistview/azlistview.dart';
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/event/event.dart';
 import 'package:flutter_start/model/protocol/common_models.dart';

@@ -1,8 +1,8 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/model/protocol/common_models.dart';
 
-import '../model/protocol/common_models.dart';
+import '../baselib/models/model.dart';
 
 class SpHelper {
   /// T 用于区分存储类型

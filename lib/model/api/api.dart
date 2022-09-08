@@ -1,6 +1,7 @@
 //WanAndroid 接口api
-import 'package:base_library/base_library.dart';
 import 'package:flutter_start/common/common.dart';
+
+import '../../baselib/data/protocol/base_resp.dart';
 
 class WanAndroidApi {
   static const String USER_LOGIN = "user/login"; //登录

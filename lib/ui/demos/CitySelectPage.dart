@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:lpinyin/lpinyin.dart';
+
+import '../../baselib/res/styles.dart';
 
 class CityModel extends ISuspensionBean {
   String name;

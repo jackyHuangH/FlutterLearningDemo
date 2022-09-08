@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/application_bloc.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
@@ -6,6 +6,8 @@ import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/model/protocol/common_models.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/index.dart';
+
+import '../../baselib/res/colors.dart';
 
 ///语言设置页面
 class LanguagePage extends StatefulWidget {

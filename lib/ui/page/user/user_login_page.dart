@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/event/event.dart';
@@ -12,6 +12,12 @@ import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/login_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../baselib/common/common.dart';
+import '../../../baselib/res/colors.dart';
+import '../../../baselib/res/styles.dart';
+import '../../../baselib/util/commonkit.dart';
+import '../../../baselib/util/route_util.dart';
+
 ///登录页
 class UserLoginPage extends StatelessWidget {
   @override
@@ -21,8 +27,8 @@ class UserLoginPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Image.asset(
-            Util.getImgPath("ic_login_bg"),
-            package: BaseConstant.packageBase,
+            CommonKit.getImgPath("ic_login_bg"),
+            fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
@@ -40,7 +46,8 @@ class LoginBody extends StatelessWidget {
     TextEditingController _passwordController = TextEditingController();
     UserRepository userRepository = UserRepository();
     //显示历史用户名
-    UserModel historyUserModel = SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
+    UserModel historyUserModel =
+        SpUtil.getObj(BaseConstant.keyUserModel, (v) => UserModel.fromJson(v));
     if (historyUserModel != null) {
       String historyName = historyUserModel.username;
       _userNameController.text = historyName.isNotEmpty ? historyName : "";
@@ -50,13 +57,20 @@ class LoginBody extends StatelessWidget {
       String userName = _userNameController.text;
       String password = _passwordController.text;
       if (userName.isEmpty || userName.length < 6) {
-        Utils.showToast(IntlUtils.getString(
-            context, userName.isEmpty ? Ids.user_login_name_empty : Ids.user_login_name_length_too_short));
+        var msg = IntlUtils.getString(context,
+            userName.isEmpty
+                ? Ids.user_login_name_empty
+                : Ids.user_login_name_length_too_short);
+        // Utils.showToast(msg);
+        CommonKit.showSnackBar(context, msg);
         return;
       }
       if (password.isEmpty || password.length < 6) {
         Utils.showToast(IntlUtils.getString(
-            context, password.isEmpty ? Ids.user_login_pwd_empty : Ids.user_login_pwd_length_too_short));
+            context,
+            password.isEmpty
+                ? Ids.user_login_pwd_empty
+                : Ids.user_login_pwd_length_too_short));
         return;
       }
       LoginReq loginReq = new LoginReq(userName, password);
@@ -64,7 +78,7 @@ class LoginBody extends StatelessWidget {
         LogUtil.e("LoginResp data:${value.toString()}");
         Utils.showToast(IntlUtils.getString(context, Ids.user_login_success));
         //发送刷新数据通知，延迟跳转主页
-        Observable.just(1).delay(Duration(microseconds: 500)).listen((event) {
+        Stream.value(1).delay(Duration(microseconds: 500)).listen((event) {
           Event.sendAppEvent(context, Constant.type_refresh_all);
           RouteUtil.goMain(context);
         });
@@ -139,10 +153,14 @@ class LoginBody extends StatelessWidget {
                   child: new RichText(
                     text: TextSpan(children: <TextSpan>[
                       new TextSpan(
-                          style: TextStyle(color: Colours.gray_66, fontSize: 15),
-                          text: IntlUtils.getString(context, Ids.user_new_user_hint)),
+                          style:
+                              TextStyle(color: Colours.gray_66, fontSize: 15),
+                          text: IntlUtils.getString(
+                              context, Ids.user_new_user_hint)),
                       new TextSpan(
-                          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 15),
                           text: IntlUtils.getString(context, Ids.user_register))
                     ]),
                   ),

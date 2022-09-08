@@ -44,7 +44,7 @@ class _TabPageState extends State<TabPage> {
         builder: (BuildContext context, AsyncSnapshot<List<TreeModel>> snapshot) {
           if (snapshot.data == null) {
             //初始化获取数据
-            Observable.just(1).delay(Duration(milliseconds: 0)).listen((event) {
+            Stream.value(1).delay(Duration(milliseconds: 0)).listen((event) {
               tabBloc.getData(labelId: widget.labelId);
             });
             return new ProgressView();

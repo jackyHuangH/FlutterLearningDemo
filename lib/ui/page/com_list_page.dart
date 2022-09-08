@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/com_list_bloc.dart';

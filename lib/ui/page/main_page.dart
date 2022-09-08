@@ -1,4 +1,3 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/strings.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_start/ui/page/repos_page.dart';
 import 'package:flutter_start/ui/page/search_page.dart';
 import 'package:flutter_start/ui/page/system_page.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
+
+import '../../baselib/util/commonkit.dart';
 
 final List<_Page> _allPages = <_Page>[
   _Page(Ids.titleHome),
@@ -39,7 +40,7 @@ class MainPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage(Util.getImgPath("dog", format: 'jpg')),
+                        image: AssetImage(CommonKit.getImgPath("dog", format: 'webp')),
                       )),
                 ),
                 onPressed: () {

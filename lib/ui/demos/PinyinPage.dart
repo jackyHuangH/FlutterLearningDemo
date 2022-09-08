@@ -1,6 +1,9 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:lpinyin/lpinyin.dart';
+
+import '../../baselib/res/colors.dart';
+import '../../baselib/res/styles.dart';
 
 class PinyinTypeModel {
   String name;

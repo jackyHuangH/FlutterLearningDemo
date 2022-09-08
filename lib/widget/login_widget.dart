@@ -1,5 +1,7 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
+
+import '../baselib/res/colors.dart';
+import '../baselib/res/styles.dart';
 
 //自定义组件，登录输入框
 class LoginInputItem extends StatefulWidget {

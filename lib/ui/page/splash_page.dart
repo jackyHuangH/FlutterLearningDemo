@@ -1,6 +1,6 @@
-import 'package:base_library/base_library.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flukit/flukit.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/common/sp_helper.dart';
@@ -11,6 +11,9 @@ import 'package:flutter_start/util/http_utils.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../baselib/res/colors.dart';
+import '../../baselib/util/route_util.dart';
 
 ///闪屏页
 class SplashPage extends StatefulWidget {
@@ -55,7 +58,7 @@ class SplashState extends State<SplashPage> {
     await SpUtil.getInstance();
     _loadSplashData();
     //延迟加载启动页和banner
-    Observable.just(1).delay(Duration(milliseconds: 500)).listen((_) {
+    Stream.value(1).delay(Duration(milliseconds: 500)).listen((_) {
       //是否加载引导页
       if (SpUtil.getBool(Constant.key_guide, defValue: true) && ObjectUtil.isNotEmpty(_guidePathList)) {
         SpUtil.putBool(Constant.key_guide, false);

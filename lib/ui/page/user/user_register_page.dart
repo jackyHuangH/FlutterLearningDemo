@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/event/event.dart';
@@ -10,6 +10,10 @@ import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/login_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../baselib/common/common.dart';
+import '../../../baselib/res/styles.dart';
+import '../../../baselib/util/route_util.dart';
+
 //注册页面
 class UserRegisterPage extends StatelessWidget {
   @override
@@ -19,8 +23,8 @@ class UserRegisterPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Image.asset(
-            Utils.getImgPath("ic_login_bg"),
-            package: BaseConstant.packageBase,
+            Utils.getImgPath("ic_register_bg"),
+            fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
@@ -66,7 +70,7 @@ class RegisterBody extends StatelessWidget {
       userRepository.register(registerReq).then((value) {
         LogUtil.e("RegisterResp:${value.toString()}");
         Utils.showToast(Ids.user_register_success);
-        Observable.just(1).delay(Duration(milliseconds: 500)).listen((event) {
+        Stream.value(1).delay(Duration(milliseconds: 500)).listen((event) {
           Event.sendAppEvent(context, Constant.type_refresh_all);
           RouteUtil.goMain(context);
         });

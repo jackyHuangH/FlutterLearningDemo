@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
@@ -9,6 +9,8 @@ import 'package:flutter_start/ui/page/user/user_login_page.dart';
 import 'package:flutter_start/widget/web_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../baselib/util/commonkit.dart';
+
 ///Navigator封装
 class NavigatorUtils {
   ///跳转普通页面
@@ -16,7 +18,7 @@ class NavigatorUtils {
     if (context == null || page == null) {
       return;
     }
-    if (needLogin && !Util.isLogin()) {
+    if (needLogin && !CommonKit.isLogin()) {
       ///需要登录但未登录时，跳转到登录页
       pushPage(context, page: UserLoginPage());
       return;

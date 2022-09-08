@@ -1,10 +1,12 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/widget/likebtn/like_button.dart';
 import 'package:share/share.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../baselib/res/colors.dart';
+import '../baselib/res/styles.dart';
 
 ///webView构建
 class WebScaffold extends StatefulWidget {

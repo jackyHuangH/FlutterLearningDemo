@@ -32,7 +32,7 @@ class EventsPage extends StatelessWidget {
     //初始化数据
     if (!_hasInit) {
       _hasInit = true;
-      Observable.just(1).listen((event) {
+      Stream.value(1).listen((event) {
         bloc.onRefresh(labelId: labelId);
       });
     }

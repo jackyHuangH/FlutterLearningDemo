@@ -1,9 +1,11 @@
 import 'dart:io';
 
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_start/common/common.dart';
+
+import '../baselib/data/net/dio_util.dart';
 
 class Global {
   //初始化全局信息

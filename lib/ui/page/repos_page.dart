@@ -31,7 +31,7 @@ class ReposPage extends StatelessWidget {
           int loadingStatus = Utils.getLoadStatus(snapshot.hasError, snapshot.data);
           if (loadingStatus == LoadStatus.loading) {
             //初始化数据
-            Observable.just(1).listen((event) {
+            Stream.value(1).listen((event) {
               bloc.onRefresh(labelId: labelId);
             });
           }

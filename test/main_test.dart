@@ -72,7 +72,7 @@ class MyBlocState extends State<MyBlocPage> {
             Text("you have pushed the button this many times:"),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.displayMedium,
             )
           ],
         ),
@@ -252,7 +252,8 @@ class SamplePageState extends State<SampleAppPage> {
       SendPort replyTo = msg[1];
 
       String dataUrl = data;
-      http.Response response = await http.get(dataUrl);
+      var url=Uri.https(dataUrl);
+      http.Response response = await http.get(url);
       // Lots of JSON to parse
       replyTo.send(json.decode(response.body));
     }
@@ -475,7 +476,8 @@ class LoadDataState extends State<LoadDataTest> {
   //网络数据获取,异步方式,类似于kotlin协程写法
   loadData() async {
     String dataUrl = "https://jsonplaceholder.typicode.com/posts";
-    http.Response response = await http.get(dataUrl);
+    var url=Uri.https(dataUrl);
+    http.Response response = await http.get(url);
     setState(() {
       widgets = json.decode(response.body);
     });

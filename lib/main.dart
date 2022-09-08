@@ -1,5 +1,5 @@
-import 'package:base_library/base_library.dart';
 import 'package:dio/dio.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_start/bloc/application_bloc.dart';
@@ -15,6 +15,9 @@ import 'package:flutter_start/res/strings.dart';
 import 'package:flutter_start/ui/page/main_page.dart';
 import 'package:flutter_start/ui/page/splash_page.dart';
 
+import 'baselib/common/common.dart';
+import 'baselib/data/net/dio_util.dart';
+import 'baselib/res/colors.dart';
 import 'model/protocol/common_models.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/collect_bloc.dart';
@@ -45,7 +45,7 @@ class CollectionPage extends StatelessWidget {
           int loadStatus = Utils.getLoadStatus(snapshot.hasError, snapshot.data);
           if (loadStatus == LoadStatus.loading) {
             //初始化加载数据
-            Observable.just(1).listen((event) {
+            Stream.value(1).listen((event) {
               collectBloc.onRefresh(labelId: labelId);
             });
           }

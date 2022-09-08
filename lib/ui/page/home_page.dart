@@ -1,6 +1,6 @@
-import 'package:base_library/base_library.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flukit/flukit.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/main_bloc.dart';
@@ -137,7 +137,7 @@ class HomePage extends StatelessWidget {
       LogUtil.e("HomePage init......");
       //初始化首页数据
       isHomeInit = true;
-      Observable.just(1).delay(new Duration(milliseconds: 500)).listen((event) {
+      Stream.value(1).delay(new Duration(milliseconds: 500)).listen((event) {
         bloc.onRefresh(labelId: labelId);
         bloc.getHotRecItem();
       });

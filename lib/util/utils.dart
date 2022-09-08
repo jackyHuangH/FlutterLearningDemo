@@ -1,4 +1,4 @@
-import 'package:base_library/base_library.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/res/colors.dart';
@@ -8,7 +8,7 @@ import 'package:lpinyin/lpinyin.dart';
 
 class Utils {
   /// 获取图片路径
-  static String getImgPath(String name, {String format: 'png'}) {
+  static String getImgPath(String name, {String format: 'webp'}) {
     return 'assets/images/$name.$format';
   }
 

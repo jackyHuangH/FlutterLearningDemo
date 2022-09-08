@@ -1,9 +1,11 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/model/protocol/home_models.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:flutter_start/widget/widgets.dart';
+
+import '../baselib/res/colors.dart';
+import '../baselib/res/styles.dart';
 
 ///微信文章列表item
 class ArticleItem extends StatelessWidget {

@@ -26,7 +26,7 @@ class SystemPage extends StatelessWidget {
         //初始化加载数据
         int loadStatus = Utils.getLoadStatus(snapshot.hasError, snapshot.data);
         if (loadStatus == LoadStatus.loading) {
-          Observable.just(1).listen((event) {
+          Stream.value(1).listen((event) {
             bloc.onRefresh(labelId: labelId);
           });
         }

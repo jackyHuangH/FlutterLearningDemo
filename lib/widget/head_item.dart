@@ -1,8 +1,10 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/res/index.dart';
 import 'package:flutter_start/util/utils.dart';
+
+import '../baselib/res/colors.dart';
+import '../baselib/res/styles.dart';
 
 ///自定义列表头部item
 class HeaderItem extends StatelessWidget {

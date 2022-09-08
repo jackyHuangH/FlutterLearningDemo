@@ -1,4 +1,3 @@
-import 'package:base_library/base_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_start/bloc/bloc_base.dart';
 import 'package:flutter_start/bloc/main_bloc.dart';
@@ -6,6 +5,11 @@ import 'package:flutter_start/common/common.dart';
 import 'package:flutter_start/ui/page/user/user_login_page.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/util/utils.dart';
+
+import '../baselib/common/common.dart';
+import '../baselib/res/colors.dart';
+import '../baselib/res/styles.dart';
+import '../baselib/util/commonkit.dart';
 
 ///自定义加载view
 class ProgressView extends StatelessWidget {
@@ -47,7 +51,6 @@ class StatusView extends StatelessWidget {
                 children: <Widget>[
                   Image.asset(
                     Utils.getImgPath("ic_network_error"),
-                    package: BaseConstant.packageBase,
                     width: 100,
                     height: 100,
                   ),
@@ -83,7 +86,6 @@ class StatusView extends StatelessWidget {
             children: <Widget>[
               Image.asset(
                 Utils.getImgPath('ic_data_empty'),
-                package: BaseConstant.packageBase,
                 width: 60,
                 height: 60,
               ),
@@ -116,7 +118,7 @@ class LikeBtn extends StatelessWidget {
     MainBloc bloc = BlocProvider.of<MainBloc>(context);
     return InkWell(
       onTap: () {
-        if (Util.isLogin()) {
+        if (CommonKit.isLogin()) {
           //收藏,取消收藏
           bloc.doCollect(id, !isLike);
         } else {
@@ -126,7 +128,7 @@ class LikeBtn extends StatelessWidget {
       },
       child: new Icon(
         Icons.favorite,
-        color: (Util.isLogin() && isLike == true) ? Colors.redAccent : Colors.grey,
+        color: (CommonKit.isLogin() && isLike == true) ? Colors.redAccent : Colors.grey,
       ),
     );
   }
