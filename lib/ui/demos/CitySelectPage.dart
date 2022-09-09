@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_start/util/utils.dart';
 import 'package:lpinyin/lpinyin.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../baselib/res/styles.dart';
 
@@ -43,9 +44,12 @@ class CitySelectPage extends StatefulWidget {
 }
 
 class _CitySelectPageState extends State<CitySelectPage> {
-  List<CityModel> cityList = new List();
-  List<CityModel> _hotCityList = new List();
+  List<CityModel> cityList = new List.empty(growable: true);
+  List<CityModel> _hotCityList = new List.empty(growable: true);
   String _currentCity = '杭州';
+
+  //用于监听AZListView滚动，并实现滚动到指定位置
+  final ItemScrollController _itemScrollController = new ItemScrollController();
 
   @override
   void initState() {
@@ -61,7 +65,8 @@ class _CitySelectPageState extends State<CitySelectPage> {
 
     SuspensionUtil.setShowSuspensionStatus(cityList);
     //子线程请求city数据
-    Future.delayed(new Duration(milliseconds: 100), () {
+    // new Future(() => {loadData()});
+    Future.delayed(new Duration(milliseconds: 10), () {
       loadData();
     });
   }
@@ -98,6 +103,20 @@ class _CitySelectPageState extends State<CitySelectPage> {
     SuspensionUtil.setShowSuspensionStatus(list);
     //update ui
     setState(() {});
+  }
+
+  ///本地模糊搜索城市名称,有匹配到返回对应index
+  int _searchCity(String keyword) {
+    if (cityList == null || cityList.isEmpty) {
+      return -1;
+    }
+    for (var element in cityList) {
+      var name = element.name;
+      if (name.contains(keyword) || name == keyword) {
+        return cityList.indexOf(element);
+      }
+    }
+    return -1;
   }
 
   Widget getSusItem(BuildContext context, String tag, {double susHeight = 40}) {
@@ -137,16 +156,37 @@ class _CitySelectPageState extends State<CitySelectPage> {
   }
 
   Widget getHeader(BuildContext context) {
+    final TextEditingController _keywordController = new TextEditingController();
+
     return Container(
+      margin: EdgeInsets.only(top: 10.0),
       color: Colors.white,
       height: 45.0,
       child: Row(
         children: [
           Expanded(
               child: TextField(
+            controller: _keywordController,
             textInputAction: TextInputAction.search,
             onEditingComplete: () {
-              Utils.showToast("暂时无操作哦");
+              //搜索城市，滚动到指定位置
+              var keyword=_keywordController.text;
+              if(keyword.isEmpty){
+                Utils.showToast("请输入搜索内容");
+                return;
+              }
+              var index = _searchCity(keyword);
+              print("搜索结果：$index");
+              if (index >= 0) {
+                if (index>1) {
+                  index-=1;
+                }
+                _itemScrollController.jumpTo(index: index);
+                // _itemScrollController.scrollTo(
+                //     index: index, duration: Duration(milliseconds: 100));
+              } else {
+                Utils.showToast("未搜索到:$keyword");
+              }
             },
             style: TextStyle(fontSize: 14.0, color: Color(0xFF282828)),
             autofocus: false,
@@ -159,8 +199,8 @@ class _CitySelectPageState extends State<CitySelectPage> {
                     TextStyle(fontSize: 14.0, color: Color(0xFFCCCCCC))),
           )),
           Gaps.hGap5,
-          Material(
-            child: InkWell(
+          MaterialButton(
+              color: Colors.white54,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -168,11 +208,23 @@ class _CitySelectPageState extends State<CitySelectPage> {
                   style: TextStyle(fontSize: 14.0, color: Colors.blueAccent),
                 ),
               ),
-              onTap: () {
+              onPressed: () {
                 Navigator.pop(context);
-              },
-            ),
-          )
+              }),
+          // Material(
+          //   child: InkWell(
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Text(
+          //         "取消",
+          //         style: TextStyle(fontSize: 14.0, color: Colors.blueAccent),
+          //       ),
+          //     ),
+          //     onTap: () {
+          //       Navigator.pop(context);
+          //     },
+          //   ),
+          // )
         ],
       ),
     );
@@ -208,6 +260,7 @@ class _CitySelectPageState extends State<CitySelectPage> {
                       child: AzListView(
                         data: cityList,
                         itemCount: cityList.length,
+                        itemScrollController: _itemScrollController,
                         itemBuilder: (BuildContext context, int index) {
                           CityModel model = cityList[index];
                           return getListItem(context, model);

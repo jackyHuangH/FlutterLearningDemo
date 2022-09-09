@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_start/national/intl_util.dart';
 import 'package:flutter_start/util/navigator_utils.dart';
 import 'package:flutter_start/widget/likebtn/like_button.dart';
-import 'package:share/share.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../baselib/res/colors.dart';
@@ -28,7 +28,8 @@ class _WebScaffoldState extends State<WebScaffold> {
         NavigatorUtils.launchInBrowser(widget.url, title: _title);
         break;
       case "share":
-        Share.share('$_title:${widget.url}');
+        //分享
+        share();
         break;
       case "collection":
         break;
@@ -36,6 +37,29 @@ class _WebScaffoldState extends State<WebScaffold> {
         break;
     }
   }
+
+  //普通分享
+  Future<void> share() async {
+    String _title = widget.title ?? IntlUtils.getString(context, widget.titleId);
+    await FlutterShare.share(
+        title: _title,
+        text: 'Example share text',
+        linkUrl: widget.url,
+        chooserTitle: 'Example Chooser Title'
+    );
+  }
+
+  //分享文件，仅供参考 需要引入 https://pub.flutter-io.cn/packages/documents_picker
+  // Future<void> shareFile() async {
+  //   List<dynamic> docs = await DocumentsPicker.pickDocuments;
+  //   if (docs == null || docs.isEmpty) return null;
+  //
+  //   await FlutterShare.shareFile(
+  //     title: 'Example share',
+  //     text: 'Example share text',
+  //     filePath: docs[0] as String,
+  //   );
+  // }
 
   ///获取弹窗菜单menuItem
   PopupMenuItem<String> _getPopupMenuItem(String text, IconData iconData) => PopupMenuItem<String>(

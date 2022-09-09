@@ -35,7 +35,7 @@ class _UpgradeDialogState extends State<UpgradeDialog> {
   int progress = 0;
   bool isDownload = false;
 
-  OnDownloadProgress progressCallback;
+  ProgressCallback progressCallback;
 
   @override
   void initState() {

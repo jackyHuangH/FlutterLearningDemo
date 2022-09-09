@@ -57,6 +57,8 @@ class SplashState extends State<SplashPage> {
   void _initAsync() async {
     await SpUtil.getInstance();
     _loadSplashData();
+    //关闭软键盘
+    FocusScope.of(context).unfocus();
     //延迟加载启动页和banner
     Stream.value(1).delay(Duration(milliseconds: 500)).listen((_) {
       //是否加载引导页

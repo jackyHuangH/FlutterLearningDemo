@@ -116,7 +116,7 @@ void main() {
     try {
       // ~/ 除法,结果为整数且向下取整
       final b = 1 ~/ 0;
-    } on IntegerDivisionByZeroException {
+    } on UnsupportedError {
       //捕获指定类型的异常
       print('除零异常');
     } finally {
@@ -159,7 +159,7 @@ void fun3(String name, int age, {bool man: false}) {
   print("name:$name,age:$age,isMan?:$man");
 }
 
-class Person {
+class Person extends Animal{
   String name;
   int age;
 
@@ -181,5 +181,11 @@ class Person {
 
   void run() {
     print("running...");
+  }
+}
+
+class Animal{
+  void eat(){
+    print("animal eating");
   }
 }

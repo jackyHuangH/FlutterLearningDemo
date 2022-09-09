@@ -61,7 +61,7 @@ class MyAppState extends State<MyApp> {
 
   ///初始化网络配置
   void _initNetUtil() {
-    Options customOption = DioUtil.getDefOptions();
+    BaseOptions customOption = DioUtil.getDefOptions();
     customOption.baseUrl = Constant.server_address;
     String cookie = SpUtil.getString(BaseConstant.keyAppToken);
     //本地缓存cookie添加到请求头

@@ -10,7 +10,7 @@ class VersionUtil {
 
   static Dio _dio = Dio();
 
-  List<OnDownloadProgress> listeners = List();
+  List<ProgressCallback> listeners = List.empty(growable: true);
 
   bool isDownload = false;
 
@@ -48,7 +48,7 @@ class VersionUtil {
       Response response = await _dio.download(
         urlPath,
         apkTempPath,
-        onProgress: (int count, int total) {
+        onReceiveProgress: (int count, int total) {
           LogUtil.e(
               "onReceiveProgress total: $total, count: $count, prect: ${count / total}");
           listeners.forEach((listener) {
@@ -72,14 +72,14 @@ class VersionUtil {
     }
   }
 
-  void addListener(OnDownloadProgress listener) {
+  void addListener(ProgressCallback listener) {
     if (listener == null) return;
     if (!listeners.contains(listener)) {
       listeners.add(listener);
     }
   }
 
-  void removeListener(OnDownloadProgress listener) {
+  void removeListener(ProgressCallback listener) {
     if (listener == null) return;
     if (listeners.contains(listener)) {
       listeners.remove(listener);

@@ -224,6 +224,10 @@ class _MainDrawerPageState extends State<MainDrawerPage> {
                             ),
                             pageName: _pageInfo.titleId,
                             needLogin: Utils.isNeedLogin(_pageInfo.titleId));
+                      } else if (_pageInfo.titleId == Ids.titleAbout) {
+                        //关于
+                        var githubUrl="https://github.com/jackyHuangH";
+                        NavigatorUtils.pushWeb(context, title: "JackyH", url: githubUrl);
                       } else {
                         NavigatorUtils.pushPage(context,
                             page: _pageInfo.page,
